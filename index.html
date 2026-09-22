@@ -1,0 +1,3794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathématiques et codage — Quiz interactifs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: #f6f3ec;
+  --desktop: #ece5f2;
+  --panel: #ffffff;
+  --ink: #201b30;
+  --ink-soft: #5b5570;
+  --heading: #2c2043;
+  --violet: #43305f;
+  --violet-deep: #2c2043;
+  --violet-light: #8873b8;
+  --violet-mist: #ece6f7;
+  --amber: #fdf3cf;
+  --amber-border: #e3c363;
+  --amber-deep: #a97e1c;
+  --output-bg: #eeeef0;
+  --output-border: #d3d3d8;
+  --line: #e2ddce;
+  --good: #2e7d5b;
+  --good-bg: #e4f3ec;
+  --bad: #ad3b46;
+  --bad-bg: #fbe9ea;
+  --close-red: #c0394a;
+  --close-red-hover: #d94b5d;
+  --radius: 14px;
+  --surface: #fdfcfa;
+  --surface-alt: #fdfcf9;
+  --surface-soft: #fbfaf6;
+  --input-bg: #ffffff;
+  --code-text: #2b2510;
+  --code-kw: #8f3b8f;
+  --code-fn: #1d5fa3;
+  --code-num: #b5651d;
+  --code-str: #2e7d5b;
+  --code-cm: #8a8470;
+  --grid-line: #c9c2ae;
+  --axis-line: #8f8770;
+  --axis-label-color: #9a927e;
+  --feedback-good-text: #1c5b40;
+  --feedback-bad-text: #832831;
+}
+
+body.dark-mode{
+  --bg: #17131f;
+  --desktop: #17131f;
+  --panel: #221c31;
+  --ink: #eae5f5;
+  --ink-soft: #b0a6cc;
+  --heading: #e7dcf7;
+  --violet: #6a53a0;
+  --violet-light: #a993d9;
+  --violet-mist: #322850;
+  --amber: #3a3016;
+  --amber-border: #5c4c20;
+  --amber-deep: #d9b354;
+  --output-bg: #241f33;
+  --output-border: #3a3350;
+  --line: #372f4a;
+  --good-bg: #17342a;
+  --bad-bg: #3a2024;
+  --surface: #241f33;
+  --surface-alt: #2a2440;
+  --surface-soft: #1e1a2c;
+  --input-bg: #2a2440;
+  --code-text: #f0e6c4;
+  --code-kw: #dd9de6;
+  --code-fn: #82bdf2;
+  --code-num: #eeb271;
+  --code-str: #8fe0b3;
+  --code-cm: #b3ab8e;
+  --grid-line: #423a5a;
+  --axis-line: #665c86;
+  --axis-label-color: #8a80a8;
+  --feedback-good-text: #8fe0bb;
+  --feedback-bad-text: #f0a8ae;
+}
+body.dark-mode .window{ border-color:var(--line); box-shadow:0 24px 60px -28px rgba(0,0,0,0.65), 0 3px 10px rgba(0,0,0,0.4); }
+body.dark-mode .empty-state{ border-color:var(--line); background:rgba(255,255,255,0.02); }
+body.dark-mode .feedback.good{ color:var(--feedback-good-text); }
+body.dark-mode .feedback.bad{ color:var(--feedback-bad-text); }
+body.dark-mode .btn.ghost{ color:var(--violet-light); border-color:var(--violet-light); }
+body.dark-mode .cell-out::before{ color:var(--ink-soft); }
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,.display{
+  font-family:'Fraunces',serif;
+  font-weight:700;
+  letter-spacing:-0.01em;
+  color:var(--heading);
+  margin:0;
+}
+
+code, .code, pre{
+  font-family:'JetBrains Mono', monospace;
+}
+
+a{color:inherit;}
+
+/* ---------- Layout shell ---------- */
+.shell{
+  max-width:920px;
+  margin:0 auto;
+  padding:0 24px 120px;
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative;
+  padding:72px 24px 52px;
+  max-width:920px;
+  margin:0 auto;
+  border-bottom:1px solid var(--line);
+  text-align:center;
+}
+.hero .kicker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  letter-spacing:.04em;
+  color:var(--violet-light);
+  margin-bottom:18px;
+}
+.hero h1{
+  font-size:clamp(40px,7vw,68px);
+  line-height:1.05;
+  font-weight:600;
+  font-optical-sizing:auto;
+}
+.hero-rule{
+  width:56px;
+  height:3px;
+  margin:26px auto 0;
+  border-radius:2px;
+  background:linear-gradient(90deg, var(--violet), var(--amber-deep));
+}
+.hero .byline{
+  margin-top:20px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13.5px;
+  color:var(--ink-soft);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.hero .byline .dot{ color:var(--violet-light); font-weight:700; }
+
+/* ---------- Barre de recherche globale ---------- */
+.search-bar{
+  position:relative;
+  margin:26px auto 0;
+  max-width:420px;
+  text-align:left;
+}
+.search-icon{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:13px;
+  opacity:.6;
+  pointer-events:none;
+}
+.search-input{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px 16px 11px 40px;
+  border-radius:24px;
+  border:1.5px solid var(--line);
+  background:var(--panel);
+  font-family:'Inter',sans-serif;
+  font-size:14px;
+  color:var(--ink);
+  outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+.search-input::placeholder{ color:var(--ink-soft); }
+.search-input:focus{ border-color:var(--violet-light); box-shadow:0 0 0 3px rgba(136,93,184,0.15); }
+.search-results{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  right:0;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 16px 40px -12px rgba(32,27,48,0.28);
+  max-height:320px;
+  overflow-y:auto;
+  z-index:60;
+  display:none;
+}
+.search-results.show{ display:block; }
+.search-result-item{
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:10px 14px;
+  border:none;
+  border-bottom:1px solid var(--line);
+  background:none;
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+}
+.search-result-item:last-child{ border-bottom:none; }
+.search-result-item:hover{ background:var(--violet-mist); }
+.search-result-section{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--violet-light);
+  margin-bottom:2px;
+}
+.search-result-title{
+  font-size:13.5px;
+  color:var(--ink);
+  line-height:1.35;
+}
+.search-empty{
+  padding:14px;
+  font-size:13px;
+  color:var(--ink-soft);
+  text-align:center;
+}
+
+/* ---------- Sticky nav (taskbar) devenue "carte des niveaux" ---------- */
+.nav-wrap{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(44,32,67,0.96);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--violet-deep);
+}
+.nav-inner{
+  max-width:920px;
+  margin:0 auto;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.level-map{
+  position:relative;
+  width:100%;
+  padding:14px 0 12px;
+  display:flex;
+  justify-content:space-between;
+}
+.level-map::before{
+  content:'';
+  position:absolute;
+  top:30px;
+  left:12.5%;
+  right:12.5%;
+  height:2px;
+  background:rgba(255,255,255,0.3);
+  z-index:0;
+}
+.level-node{
+  position:relative;
+  z-index:1;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:none;
+  padding:0;
+  cursor:pointer;
+}
+.level-circle{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.35);
+  background:#372a52;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  font-size:13px;
+  color:#e3ddf2;
+  transition:all .2s ease;
+}
+.level-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.01em;
+  color:#b6acd4;
+  text-align:center;
+  max-width:88px;
+  line-height:1.25;
+  transition:color .15s ease;
+}
+.level-node:hover .level-circle{ border-color:#fff; }
+.level-node:hover .level-label{ color:#fff; }
+.level-node.open .level-circle{
+  border-color:var(--violet-light);
+  box-shadow:0 0 0 4px rgba(136,93,184,0.35);
+  background:#5a4a86;
+}
+.level-node.open .level-label{ color:#fff; }
+.level-node.in-progress .level-circle{
+  background:var(--violet-light);
+  border-color:var(--violet-light);
+  color:#241c33;
+}
+.level-node.completed .level-circle{
+  background:#2e8b5c;
+  border-color:#2e8b5c;
+  color:#fff;
+}
+.level-node.completed .level-label{ color:#8fe0b3; }
+
+/* ---------- Bouton SageMathCell (en haut à gauche du header) ---------- */
+.sagecell-btn{
+  position:absolute;
+  top:28px;
+  left:24px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 15px 7px 10px;
+  border-radius:20px;
+  border:1.5px solid var(--line);
+  background:var(--panel);
+  text-decoration:none;
+  cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink);
+  box-shadow:0 1px 4px rgba(32,27,48,0.08);
+  transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.sagecell-btn:hover{
+  border-color:var(--violet-light);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(32,27,48,0.16);
+}
+.sagecell-logo{
+  height:20px;
+  width:auto;
+  display:block;
+  flex:0 0 auto;
+}
+.sagecell-btn span{ white-space:nowrap; }
+
+/* ---------- Bascule mode sombre (en haut à droite du header) ---------- */
+.theme-toggle{
+  position:absolute;
+  top:28px;
+  right:24px;
+  flex:0 0 auto;
+  width:52px;
+  height:28px;
+  border-radius:14px;
+  border:1.5px solid var(--line);
+  background:var(--panel);
+  padding:3px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  transition:background .18s ease, border-color .18s ease;
+  box-shadow:0 1px 4px rgba(32,27,48,0.08);
+}
+.theme-toggle:hover{ border-color:var(--violet-light); }
+.theme-toggle-dot{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:var(--amber);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  line-height:1;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+  transition:transform .2s ease, background .18s ease;
+}
+.theme-toggle.active{ background:var(--violet-deep); border-color:var(--violet-deep); }
+.theme-toggle.active .theme-toggle-dot{ transform:translateX(24px); background:#2c2440; }
+
+/* ---------- "Desktop" area + windows ---------- */
+main.shell{
+  padding-top:36px;
+}
+.empty-state{
+  max-width:640px;
+  margin:40px auto;
+  padding:42px 28px;
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:15px;
+  border:1.5px dashed #cabfe0;
+  border-radius:16px;
+  background:rgba(255,255,255,0.4);
+}
+.empty-state .display{
+  font-size:20px;
+  margin-bottom:8px;
+  color:var(--heading);
+}
+
+section.window{
+  display:none;
+  opacity:0;
+  transform:translateY(6px);
+  background:var(--panel);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 24px 60px -28px rgba(32,27,48,0.45), 0 3px 10px rgba(32,27,48,0.10);
+  border:1px solid #dcd4ee;
+  transition:opacity .28s ease, transform .28s ease;
+}
+section.window.open{display:block;}
+section.window.open.visible{opacity:1; transform:translateY(0);}
+
+.window-titlebar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 12px 12px 18px;
+  background:var(--violet-deep);
+}
+.window-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  letter-spacing:.02em;
+  color:#f1eef8;
+}
+.window-title .tag-num{
+  font-weight:700;
+  color:var(--amber-border);
+}
+.window-close{
+  flex:0 0 auto;
+  width:26px;height:26px;
+  border-radius:7px;
+  border:none;
+  background:var(--close-red);
+  color:#fff;
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  line-height:1;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .12s ease, transform .08s ease;
+}
+.window-close:hover{background:var(--close-red-hover);}
+.window-close:active{transform:scale(.92);}
+
+.window-body{
+  padding:28px 26px 34px;
+}
+
+.part-intro{
+  color:var(--ink-soft);
+  max-width:100%;
+  margin:0 0 28px;
+  font-size:15.5px;
+}
+
+/* ---------- Code cells (SageMathCell style) ---------- */
+.cell{
+  margin:18px 0 28px;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid var(--amber-border);
+}
+.cell-in{
+  background:var(--amber);
+  padding:14px 18px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  line-height:1.65;
+  white-space:pre;
+  overflow-x:auto;
+  color:var(--code-text);
+}
+.kw{color:var(--code-kw);font-weight:700;}
+.fn{color:var(--code-fn);}
+.num{color:var(--code-num);}
+.str{color:var(--code-str);}
+.cm{color:var(--code-cm);font-style:italic;}
+.cell-out{
+  background:var(--output-bg);
+  border-top:1px solid var(--output-border);
+  padding:12px 18px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  white-space:pre;
+  overflow-x:auto;
+  color:var(--ink);
+}
+.cell-out::before{
+  content:"Sortie";
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--ink-soft);
+  margin-bottom:6px;
+}
+
+/* ---------- Accordéon partagé : en-tête cliquable + corps repliable ---------- */
+.qheader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+  padding:16px 22px;
+  border:none;
+  background:none;
+  font-family:inherit;
+  color:inherit;
+}
+.qheader:hover{ background:var(--violet-mist); }
+.qheader-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+.qheader .qkind{ margin:0; }
+.chevron{
+  flex:0 0 auto;
+  font-size:15px;
+  color:var(--ink-soft);
+  transition:transform .2s ease;
+  line-height:1;
+}
+.qcard.expanded .chevron{ transform:rotate(180deg); }
+.qbody{
+  display:none;
+  padding:0 22px 24px;
+}
+.qcard.expanded .qbody{ display:block; }
+
+/* ---------- Quiz cards ---------- */
+.quiz{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin:0 0 22px;
+  box-shadow:0 1px 0 rgba(32,27,48,0.03);
+}
+.quiz .qmeta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.quiz .qkind{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--violet-light);
+}
+.quiz .qtext{
+  font-size:16.5px;
+  font-weight:600;
+  color:var(--ink);
+  margin:2px 0 16px;
+  max-width:100%;
+}
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.options.options-row{
+  flex-direction:row;
+  align-items:stretch;
+}
+.options.options-row .opt{
+  flex:1 1 0;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:6px;
+}
+@media (max-width:640px){
+  .options.options-row{ flex-direction:column; }
+  .options.options-row .opt{ flex-direction:row; align-items:flex-start; text-align:left; }
+}
+.opt{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  text-align:left;
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1.5px solid var(--line);
+  background:var(--surface-alt);
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+  font-size:14.5px;
+  color:var(--ink);
+  transition:border-color .12s ease, background .12s ease, transform .06s ease;
+}
+.opt .bullet{
+  flex:0 0 auto;
+  width:22px;height:22px;
+  border-radius:50%;
+  border:1.5px solid var(--violet-light);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--violet-light);
+  margin-top:1px;
+}
+.opt:hover:not(.locked){border-color:var(--violet-light);background:var(--violet-mist);}
+.opt.selected{border-color:var(--violet);background:var(--violet-mist);}
+.opt.selected .bullet{background:var(--violet);border-color:var(--violet);color:#fff;}
+.opt.locked{cursor:default;}
+.opt.correct{background:var(--good-bg);border-color:var(--good);}
+.opt.correct .bullet{background:var(--good);border-color:var(--good);color:#fff;}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad);}
+.opt.wrong .bullet{background:var(--bad);border-color:var(--bad);color:#fff;}
+.opt.dim{opacity:.55;}
+
+.feedback{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:14px;
+  display:none;
+}
+.feedback.show{display:block;animation:pop .18s ease;}
+.feedback.good{background:var(--good-bg);color:var(--feedback-good-text);border:1px solid #bfe3d1;}
+.feedback.bad{background:var(--bad-bg);color:var(--feedback-bad-text);border:1px solid #f0c4c8;}
+.feedback b{font-family:'Fraunces',serif;}
+@keyframes pop{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+
+.qactions{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.btn{
+  font-family:'Inter',sans-serif;
+  font-weight:600;
+  font-size:13.5px;
+  border-radius:9px;
+  padding:9px 16px;
+  border:1.5px solid var(--violet);
+  background:var(--violet);
+  color:#fff;
+  cursor:pointer;
+  transition:opacity .12s ease;
+}
+.btn:hover{opacity:.88;}
+.btn:disabled{opacity:.35;cursor:not-allowed;}
+.btn.ghost{
+  background:none;
+  color:var(--violet);
+}
+
+/* ---------- Drag-to-order exercise ---------- */
+.dragquiz{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin:0 0 22px;
+}
+.dragquiz .qkind{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--violet-light);
+}
+.dragquiz .qtext{
+  font-size:16.5px;
+  font-weight:600;
+  margin:2px 0 6px;
+  max-width:100%;
+}
+.dragquiz .qhint{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  margin-bottom:16px;
+}
+.draglist{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  touch-action:none;
+}
+.dragitem{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--surface-alt);
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding:11px 14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  user-select:none;
+  cursor:grab;
+  position:relative;
+  transition:box-shadow .12s ease, border-color .12s ease;
+}
+.dragitem.dragging{
+  cursor:grabbing;
+  box-shadow:0 8px 20px rgba(32,27,48,0.18);
+  z-index:5;
+  border-color:var(--violet-light);
+}
+.dragitem .handle{
+  color:var(--violet-light);
+  font-size:15px;
+  letter-spacing:1px;
+  flex:0 0 auto;
+}
+.dragitem .idx{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:#a39fb0;
+  flex:0 0 auto;
+  min-width:16px;
+}
+.dragitem.correct{background:var(--good-bg);border-color:var(--good);}
+.dragitem.wrong{background:var(--bad-bg);border-color:var(--bad);}
+
+/* ---------- Matching exercise (gauche / droite) ---------- */
+.matchquiz{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin:0 0 22px;
+}
+.matchquiz .qkind{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--violet-light);
+}
+.matchquiz .qtext{
+  font-size:16.5px;
+  font-weight:600;
+  margin:2px 0 6px;
+  max-width:100%;
+}
+.matchquiz .qhint{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  margin-bottom:16px;
+}
+.matchgrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+.matchcol{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.matchcol .collabel{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:#a39fb0;
+  margin-bottom:2px;
+}
+.matchitem{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-align:left;
+  padding:11px 12px;
+  border-radius:10px;
+  border:1.5px solid var(--line);
+  background:var(--surface-alt);
+  cursor:pointer;
+  font-size:14px;
+  font-family:'Inter',sans-serif;
+  color:var(--ink);
+  transition:border-color .12s ease, background .12s ease;
+}
+.matchitem .badge{
+  flex:0 0 auto;
+  width:22px;height:22px;
+  border-radius:50%;
+  border:1.5px solid var(--violet-light);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  font-weight:700;
+  color:var(--violet-light);
+}
+.matchitem.selected{border-color:var(--violet);background:var(--violet-mist);}
+.matchitem.paired{background:var(--violet-mist);}
+.matchitem.paired .badge{background:var(--violet);border-color:var(--violet);color:#fff;}
+.matchitem.correct{background:var(--good-bg);border-color:var(--good);}
+.matchitem.correct .badge{background:var(--good);border-color:var(--good);color:#fff;}
+.matchitem.wrong{background:var(--bad-bg);border-color:var(--bad);}
+.matchitem.wrong .badge{background:var(--bad);border-color:var(--bad);color:#fff;}
+.matchitem code{font-family:'JetBrains Mono',monospace;font-size:13px;}
+@media (max-width:600px){
+  .matchgrid{grid-template-columns:1fr;}
+}
+
+/* ---------- Live geometry preview (static SVG under a code cell) ---------- */
+.geopreview{
+  margin:14px 0 22px;
+  display:flex;
+  justify-content:center;
+  background:var(--surface-soft);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px;
+}
+.geopreview svg{ display:block; max-width:100%; height:auto; }
+.grid-line{ stroke:var(--grid-line); stroke-width:0.75; stroke-dasharray:2,3; }
+.axis-line{ stroke:var(--axis-line); stroke-width:1.4; }
+.axis-label{ font-family:'JetBrains Mono',monospace; font-size:9.5px; fill:var(--axis-label-color); }
+
+/* ---------- Interactive geometry canvas exercise ---------- */
+.canvasquiz{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin:0 0 22px;
+}
+.canvasquiz .qkind{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--violet-light);
+}
+.canvasquiz .qtext{
+  font-size:16.5px;
+  font-weight:600;
+  margin:2px 0 6px;
+  max-width:100%;
+}
+.canvasquiz .qhint{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  margin-bottom:16px;
+}
+.canvas-wrap{
+  display:flex;
+  justify-content:center;
+  background:var(--surface-soft);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:16px;
+  touch-action:none;
+}
+.canvas-wrap svg{ display:block; max-width:100%; height:auto; }
+.drag-marker{ cursor:grab; }
+.drag-marker:active{ cursor:grabbing; }
+.slider-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:16px;
+}
+.slider-row input[type=range]{
+  flex:1;
+  accent-color:var(--violet);
+}
+.slider-row .slider-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  color:var(--heading);
+  min-width:46px;
+  text-align:right;
+}
+
+/* ---------- Fill-in-the-blank code exercise ---------- */
+.fillquiz{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin:0 0 22px;
+}
+.fillquiz .qkind{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--violet-light);
+}
+.fillquiz .qtext{
+  font-size:16.5px;
+  font-weight:600;
+  margin:2px 0 16px;
+  max-width:100%;
+}
+.blank-input{
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  font-weight:700;
+  text-align:center;
+  border:2px dashed var(--violet-light);
+  background:var(--input-bg);
+  color:var(--heading);
+  padding:2px 9px;
+  margin:0 3px;
+  border-radius:7px;
+  outline:none;
+  min-width:2.4em;
+}
+.blank-input::placeholder{ color:#b7aed0; font-weight:500; }
+.blank-input:focus{ border-style:solid; border-color:var(--violet); background:var(--violet-mist); }
+.blank-input.correct{ border-style:solid; border-color:var(--good); background:var(--good-bg); color:var(--feedback-good-text); }
+.blank-input.wrong{ border-style:solid; border-color:var(--bad); background:var(--bad-bg); color:var(--feedback-bad-text); }
+.fill-out{
+  display:none;
+}
+.fill-out.show{
+  display:block;
+  margin-top:0;
+}
+
+/* ---------- Execution trace exercise ---------- */
+.tracequiz{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px 24px 26px;
+  margin:0 0 22px;
+}
+.tracequiz .qkind{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--violet-light);
+}
+.tracequiz .qtext{
+  font-size:16.5px;
+  font-weight:600;
+  margin:2px 0 16px;
+  max-width:100%;
+}
+.trace-code{
+  background:var(--amber);
+  border:1px solid var(--amber-border);
+  border-radius:8px;
+  padding:12px 0;
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  line-height:1.7;
+  margin-bottom:16px;
+  overflow-x:auto;
+}
+.trace-line{
+  padding:2px 18px;
+  white-space:pre;
+  border-left:3px solid transparent;
+  color:var(--code-text);
+}
+.trace-line.active{
+  background:rgba(136,93,184,0.16);
+  border-left-color:var(--violet);
+  font-weight:600;
+}
+.trace-panel{
+  display:flex;
+  gap:22px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  margin-bottom:14px;
+}
+.trace-vars{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.trace-var{
+  background:var(--violet-mist);
+  border:1px solid #d9cdec;
+  border-radius:8px;
+  padding:8px 12px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  color:var(--heading);
+  min-width:64px;
+  text-align:center;
+}
+.trace-var .vname{ display:block; font-size:10.5px; color:var(--violet-light); margin-bottom:2px; }
+.trace-note{
+  flex:1;
+  min-width:180px;
+  font-size:13.5px;
+  color:var(--ink-soft);
+  padding-top:4px;
+}
+.trace-controls{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.trace-controls .step-count{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  color:var(--ink-soft);
+}
+.trace-out{
+  margin-top:14px;
+}
+
+/* ---------- Image-choice exercise (cliquer sur la bonne figure) ---------- */
+.imgchoicequiz{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin:0 0 22px;
+}
+.imgchoicequiz .qkind{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--violet-light);
+}
+.imgchoicequiz .qtext{
+  font-size:16.5px;
+  font-weight:600;
+  margin:2px 0 16px;
+  max-width:100%;
+}
+.imgchoice-grid{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:6px;
+}
+.imgchoice-card{
+  border:2px solid var(--line);
+  border-radius:12px;
+  padding:10px 10px 12px;
+  background:var(--surface-soft);
+  cursor:pointer;
+  text-align:center;
+  transition:border-color .12s ease, background .12s ease, transform .06s ease;
+  flex:0 0 auto;
+}
+.imgchoice-card svg{ display:block; }
+.imgchoice-card .imgchoice-label{
+  margin-top:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+}
+.imgchoice-card:hover:not(.locked){ border-color:var(--violet-light); }
+.imgchoice-card.selected{ border-color:var(--violet); background:var(--violet-mist); }
+.imgchoice-card.correct{ border-color:var(--good); background:var(--good-bg); }
+.imgchoice-card.wrong{ border-color:var(--bad); background:var(--bad-bg); }
+.imgchoice-card.locked{ cursor:default; }
+.imgchoice-card.dim{ opacity:.5; }
+
+/* ---------- Tutoriels (mini-fenêtres imbriquées, en haut de chaque section) ----------
+   Léger lavis vert translucide + liseré vert, pour signaler le tutoriel sans
+   assombrir la lecture — s'adapte naturellement au mode clair/sombre. */
+.tutorial-window{
+  border:1.5px solid rgba(46,139,92,0.38);
+  border-left:4px solid #2e8b5c;
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:18px;
+  background:rgba(46,139,92,0.07);
+}
+.tutorial-titlebar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 12px 12px 14px;
+  background:rgba(46,139,92,0.13);
+  cursor:pointer;
+  user-select:none;
+  transition:background .15s ease;
+}
+.tutorial-titlebar:hover{ background:rgba(46,139,92,0.2); }
+.tutorial-titlebar:focus{ outline:2px solid #2e8b5c; outline-offset:-2px; }
+.tutorial-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  font-weight:700;
+  color:var(--heading);
+  letter-spacing:.02em;
+}
+.tutorial-actions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.tutorial-chevron{
+  font-size:14px;
+  color:var(--heading);
+  opacity:.7;
+}
+.tutorial-window.expanded .tutorial-chevron{ transform:rotate(180deg); }
+.tutorial-close{
+  flex:0 0 auto;
+  width:22px;height:22px;
+  border-radius:6px;
+  border:none;
+  background:var(--close-red);
+  color:#fff;
+  font-size:11px;
+  line-height:1;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .12s ease, transform .08s ease;
+}
+.tutorial-close:hover{ background:var(--close-red-hover); }
+.tutorial-close:active{ transform:scale(.92); }
+.tutorial-body{
+  display:none;
+  padding:18px 20px 20px;
+}
+.tutorial-window.expanded .tutorial-body{ display:block; }
+.tutorial-intro{
+  font-size:14px;
+  color:var(--ink-soft);
+  margin:0 0 14px;
+  max-width:100%;
+}
+.tutorial-intro ul{
+  margin:0;
+  padding-left:20px;
+}
+.tutorial-intro li{
+  margin:0 0 4px;
+}
+.tutorial-intro li:last-child{
+  margin-bottom:0;
+}
+.tutorial-window .trace-var{ background:rgba(46,139,92,0.14); border-color:rgba(46,139,92,0.35); color:var(--heading); }
+.tutorial-window .trace-var .vname{ color:#3f8f68; }
+.tutorial-window .geopreview{ background:rgba(46,139,92,0.06); border-color:rgba(46,139,92,0.3); }
+.tutorial-window .trace-code{ background:#fdf3cf; border-color:#e3c363; }
+.tutorial-window .trace-line{ color:#2b2510; }
+.tutorial-window .trace-line.active{ background:rgba(136,93,184,0.22); }
+.tutorial-window .trace-line .kw{ color:#8f3b8f; }
+.tutorial-window .trace-line .fn{ color:#1d5fa3; }
+.tutorial-window .trace-line .num{ color:#b5651d; }
+.tutorial-window .trace-line .str{ color:#2e7d5b; }
+.tutorial-window .trace-line .cm{ color:#8a8470; }
+.tutorial-window .cell-out{ background:#eeeef0; border-color:#d3d3d8; color:#201b30; }
+.tutorial-window .cell-out::before{ color:#8a8a90; }
+
+/* ---------- Footer ---------- */
+/* ---------- Séparateur entre tutoriels et questions ---------- */
+.section-divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:22px 0 22px;
+}
+.section-divider::before,
+.section-divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--line);
+}
+.section-divider span{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--ink-soft);
+  white-space:nowrap;
+}
+
+/* ---------- Numérotation des questions ---------- */
+.qkind{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.qnum-badge{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:var(--violet);
+  color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0;
+  text-transform:none;
+}
+
+/* ---------- Mascotte (renard) ---------- */
+.mascot{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:90;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:8px;
+  pointer-events:none;
+}
+.mascot-bubble{
+  max-width:200px;
+  background:var(--violet-deep);
+  color:#fff;
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  padding:9px 13px;
+  border-radius:12px 12px 3px 12px;
+  box-shadow:0 8px 20px rgba(32,27,48,0.3);
+  opacity:0;
+  transform:translateY(6px) scale(.96);
+  transition:opacity .18s ease, transform .18s ease;
+}
+.mascot-bubble.show{ opacity:1; transform:translateY(0) scale(1); }
+.mascot-avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:var(--panel);
+  border:2px solid var(--amber-border);
+  pointer-events:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  box-shadow:0 6px 18px rgba(32,27,48,0.22);
+  cursor:pointer;
+  transition:box-shadow .15s ease;
+}
+.mascot-avatar:hover{ box-shadow:0 8px 22px rgba(32,27,48,0.3); }
+.mascot-avatar:focus{ outline:2px solid var(--violet-light); outline-offset:2px; }
+@keyframes mascot-bounce{
+  0%{transform:scale(1) rotate(0);}
+  30%{transform:scale(1.22) rotate(-8deg);}
+  55%{transform:scale(0.95) rotate(5deg);}
+  75%{transform:scale(1.06) rotate(-2deg);}
+  100%{transform:scale(1) rotate(0);}
+}
+@keyframes mascot-shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-5px) rotate(-5deg);}
+  40%{transform:translateX(5px) rotate(5deg);}
+  60%{transform:translateX(-4px) rotate(-3deg);}
+  80%{transform:translateX(4px) rotate(3deg);}
+}
+.mascot-avatar.mascot-bounce{ animation:mascot-bounce .55s ease; }
+.mascot-avatar.mascot-shake{ animation:mascot-shake .4s ease; }
+
+/* ---------- Assistant renard (mini-chatbot) ---------- */
+.mascot-chat{
+  position:fixed;
+  right:22px;
+  bottom:86px;
+  width:300px;
+  max-height:420px;
+  display:flex;
+  flex-direction:column;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 24px 55px -18px rgba(32,27,48,0.4);
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(10px) scale(.97);
+  pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+  z-index:95;
+}
+.mascot-chat.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+.mascot-chat-header{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 10px 10px 14px;
+  background:var(--violet-deep);
+  color:#f1eef8;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  font-weight:700;
+}
+.chat-close-btn{
+  flex:0 0 auto;
+  width:22px;height:22px;
+  border-radius:6px;
+  border:none;
+  background:var(--close-red);
+  color:#fff;
+  font-size:11px;
+  line-height:1;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .12s ease, transform .08s ease;
+}
+.chat-close-btn:hover{ background:var(--close-red-hover); }
+.chat-close-btn:active{ transform:scale(.92); }
+.mascot-chat-body{
+  flex:1 1 auto;
+  overflow-y:auto;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.chat-msg{
+  max-width:88%;
+  padding:8px 11px;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.45;
+}
+.chat-msg.bot{
+  align-self:flex-start;
+  background:var(--violet-mist);
+  color:var(--ink);
+  border-bottom-left-radius:3px;
+}
+.chat-msg.user{
+  align-self:flex-end;
+  background:var(--violet);
+  color:#fff;
+  border-bottom-right-radius:3px;
+}
+.chat-code{
+  margin-top:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  background:var(--amber);
+  color:var(--code-text);
+  padding:4px 8px;
+  border-radius:6px;
+  border:1px solid var(--amber-border);
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.chat-output{
+  margin-top:4px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  background:var(--output-bg);
+  color:var(--ink);
+  padding:4px 8px;
+  border-radius:6px;
+  border:1px solid var(--output-border);
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.chat-output-label{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:9.5px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--ink-soft);
+  margin-bottom:2px;
+}
+.chat-choices{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-self:flex-start;
+  max-width:100%;
+}
+.chat-choice{
+  font-family:'Inter',sans-serif;
+  font-size:12.5px;
+  font-weight:600;
+  padding:6px 11px;
+  border-radius:14px;
+  border:1.5px solid var(--violet-light);
+  background:var(--surface);
+  color:var(--violet-deep);
+  cursor:pointer;
+  transition:background .12s ease, border-color .12s ease;
+}
+.chat-choice:hover:not(:disabled){ background:var(--violet-mist); border-color:var(--violet); }
+.chat-choice:disabled{ opacity:.4; cursor:default; }
+
+/* ---------- Glossaire au survol ---------- */
+.glossary-term{
+  position:relative;
+  border-bottom:1px dotted currentColor;
+  cursor:help;
+}
+.glossary-term::after{
+  content:attr(data-tip);
+  position:absolute;
+  bottom:calc(100% + 9px);
+  left:50%;
+  transform:translateX(-50%) translateY(4px);
+  background:var(--violet-deep);
+  color:#fff;
+  font-family:'Inter',sans-serif;
+  font-size:11.5px;
+  font-weight:500;
+  line-height:1.4;
+  padding:8px 10px;
+  border-radius:8px;
+  width:max-content;
+  max-width:210px;
+  white-space:normal;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .15s ease, transform .15s ease;
+  z-index:200;
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+}
+.glossary-term::before{
+  content:'';
+  position:absolute;
+  bottom:100%;
+  left:50%;
+  transform:translateX(-50%) translateY(-2px);
+  border:5px solid transparent;
+  border-top-color:var(--violet-deep);
+  opacity:0;
+  transition:opacity .15s ease;
+  z-index:200;
+}
+.glossary-term:hover::after,
+.glossary-term:focus::after{ opacity:1; transform:translateX(-50%) translateY(0); }
+.glossary-term:hover::before,
+.glossary-term:focus::before{ opacity:1; }
+
+/* ---------- Footer ---------- */
+footer{
+  max-width:920px;
+  margin:60px auto 0;
+  padding:24px;
+  border-top:1px solid var(--line);
+  font-size:13px;
+  color:var(--ink-soft);
+}
+
+@media (max-width:600px){
+  .hero{padding:60px 18px 30px;}
+  .theme-toggle{top:16px;right:16px;}
+  .sagecell-btn{top:16px;left:16px;padding:6px 10px 6px 8px;}
+  .sagecell-btn span{display:none;}
+  .sagecell-logo{height:17px;}
+  .hero h1{font-size:clamp(30px,9vw,44px);}
+  .shell{padding:0 16px 100px;}
+  .quiz,.dragquiz,.matchquiz,.canvasquiz,.fillquiz,.tracequiz,.imgchoicequiz{padding:18px;}
+  .window-body{padding:20px 18px 26px;}
+  .trace-panel{flex-direction:column;}
+  .tutorial-body{padding:14px;}
+  .level-circle{width:26px;height:26px;font-size:11px;}
+  .level-label{font-size:8.5px;max-width:60px;}
+  .level-map::before{top:27px;}
+  .mascot{right:12px;bottom:12px;}
+  .mascot-avatar{width:42px;height:42px;font-size:21px;}
+  .mascot-chat{right:10px; left:10px; width:auto; bottom:76px; max-height:60vh;}
+  .search-bar{max-width:100%;}
+  .mascot-bubble{max-width:150px;font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <a class="sagecell-btn" href="https://sagecell.sagemath.org/" target="_blank" rel="noopener noreferrer">
+    <img class="sagecell-logo" src="https://wiki.sagemath.org/CorporateIdentity?action=AttachFile&amp;do=get&amp;target=logo_sagemath_cell.svg" alt="SageMathCell">
+    <span>Ouvrir SageMathCell</span>
+  </a>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Basculer le mode sombre" aria-pressed="false">
+    <span class="theme-toggle-dot">☀️</span>
+  </button>
+  <div class="kicker">Cours à option en 4C — Lycée Michel Rodange</div>
+  <h1>Mathématiques<br>et codage</h1>
+  <div class="hero-rule"></div>
+  <div class="byline">
+    <span>Luca Notarnicola</span>
+    <span class="dot">·</span>
+    <span>Massimo Notarnicola</span>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="global-search" class="search-input" placeholder="Rechercher une question, une commande…" autocomplete="off">
+    <div class="search-results" id="search-results"></div>
+  </div>
+</header>
+
+<div class="nav-wrap">
+  <div class="nav-inner">
+    <div class="level-map" id="level-map">
+      <button class="level-node" data-target="arithmetique" data-num="1">
+        <span class="level-circle">1</span>
+        <span class="level-label">arithmétique</span>
+      </button>
+      <button class="level-node" data-target="geometrie" data-num="2">
+        <span class="level-circle">2</span>
+        <span class="level-label">géométrie</span>
+      </button>
+      <button class="level-node" data-target="logique" data-num="3">
+        <span class="level-circle">3</span>
+        <span class="level-label">structures logiques</span>
+      </button>
+      <button class="level-node" data-target="fonctions" data-num="4">
+        <span class="level-circle">4</span>
+        <span class="level-label">fonctions</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main class="shell">
+
+  <div class="empty-state" id="empty-state" style="display:none;">
+    <div class="display">Aucune fenêtre ouverte</div>
+    Cliquez sur une partie du cours ci-dessus pour l'ouvrir.
+  </div>
+
+  <!-- ======================= PART 1 : ARITHMETIQUE ======================= -->
+  <section class="window part" id="arithmetique">
+    <div class="window-titlebar">
+      <div class="window-title"><span class="tag-num">1</span> Arithmétique</div>
+      <button class="window-close" data-target="arithmetique" aria-label="Fermer la fenêtre">✕</button>
+    </div>
+    <div class="window-body">
+      <div id="tut-arith-1"></div>
+      <div id="tut-arith-2"></div>
+      <div class="section-divider"><span>Questions</span></div>
+      <div id="q-arith-1"></div>
+      <div id="q-arith-match"></div>
+      <div id="q-arith-2"></div>
+      <div id="q-arith-3"></div>
+      <div id="q-arith-4"></div>
+    </div>
+  </section>
+
+  <!-- ======================= PART 2 : GEOMETRIE ======================= -->
+  <section class="window part" id="geometrie">
+    <div class="window-titlebar">
+      <div class="window-title"><span class="tag-num">2</span> Géométrie</div>
+      <button class="window-close" data-target="geometrie" aria-label="Fermer la fenêtre">✕</button>
+    </div>
+    <div class="window-body">
+      <div id="tut-geo-1"></div>
+      <div id="tut-geo-2"></div>
+      <div class="section-divider"><span>Questions</span></div>
+      <div id="q-geo-0a"></div>
+      <div id="q-geo-0b"></div>
+      <div id="q-geo-0c"></div>
+      <div id="q-geo-canvas-center"></div>
+      <div id="q-geo-canvas-radius"></div>
+      <div id="q-geo-1"></div>
+      <div id="q-geo-2"></div>
+      <div id="q-geo-match"></div>
+    </div>
+  </section>
+
+  <!-- ======================= PART 3 : STRUCTURES LOGIQUES ======================= -->
+  <section class="window part" id="logique">
+    <div class="window-titlebar">
+      <div class="window-title"><span class="tag-num">3</span> Structures logiques</div>
+      <button class="window-close" data-target="logique" aria-label="Fermer la fenêtre">✕</button>
+    </div>
+    <div class="window-body">
+      <div id="tut-log-0"></div>
+      <div id="tut-log-1"></div>
+      <div id="tut-log-2"></div>
+      <div class="section-divider"><span>Questions</span></div>
+      <div id="q-log-1"></div>
+      <div id="q-log-2"></div>
+      <div id="q-log-3"></div>
+      <div id="q-log-4"></div>
+      <div id="q-log-fill"></div>
+      <div id="q-log-match"></div>
+      <div id="q-log-drag-1"></div>
+      <div id="q-log-drag-2"></div>
+      <div id="q-log-drag-3"></div>
+    </div>
+  </section>
+
+  <!-- ======================= PART 4 : FONCTIONS ======================= -->
+  <section class="window part" id="fonctions">
+    <div class="window-titlebar">
+      <div class="window-title"><span class="tag-num">4</span> Les fonctions</div>
+      <button class="window-close" data-target="fonctions" aria-label="Fermer la fenêtre">✕</button>
+    </div>
+    <div class="window-body">
+      <div id="tut-fn-1"></div>
+      <div id="tut-fn-2"></div>
+      <div id="tut-fn-3"></div>
+      <div class="section-divider"><span>Questions</span></div>
+      <div id="q-fn-1"></div>
+      <div id="q-fn-2"></div>
+      <div id="q-fn-3"></div>
+      <div id="q-fn-4"></div>
+      <div id="q-fn-5"></div>
+      <div id="q-fn-fill"></div>
+      <div id="q-fn-match"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Mathématiques et codage — Cours à option 4C · Lycée Michel Rodange
+</footer>
+
+<div class="mascot" id="mascot">
+  <div class="mascot-bubble" id="mascot-bubble"></div>
+  <div class="mascot-avatar" id="mascot-avatar" role="button" tabindex="0" aria-label="Ouvrir l'assistant">🦊</div>
+</div>
+
+<div class="mascot-chat" id="mascot-chat">
+  <div class="mascot-chat-header">
+    <span>🦊 Assistant</span>
+    <button class="chat-close-btn" id="mascot-chat-close" type="button" aria-label="Fermer l'assistant">✕</button>
+  </div>
+  <div class="mascot-chat-body" id="mascot-chat-body"></div>
+</div>
+
+<script>
+/* ============================================================
+   Moteur de quiz — rendu générique + logique interactive
+   ============================================================ */
+
+function el(tag, cls, html){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html !== undefined) e.innerHTML = html;
+  return e;
+}
+
+/* ============================================================
+   Progression par section (carte des niveaux) + mascotte
+   ============================================================ */
+/* ============================================================
+   Données partagées : glossaire, exemples de commandes, sections
+   ============================================================ */
+const GLOSSARY = {
+  'is_prime': 'Teste si un nombre est premier (renvoie True ou False).',
+  'factor': 'Donne la décomposition en facteurs premiers.',
+  'divisors': 'Renvoie la liste des diviseurs positifs d\'un nombre.',
+  'nb_diviseurs': 'Calcule le nombre de diviseurs positifs d\'un nombre.',
+  'circle': 'Trace un cercle à partir d\'un centre et d\'un rayon.',
+  'polygon': 'Trace un polygone fermé à partir d\'une liste de sommets.',
+  'point': 'Place un point à des coordonnées données.',
+  'line': 'Trace un segment ou une ligne entre des points.',
+  'range': 'Génère une suite d\'entiers, du début (inclus) à la fin (exclue).',
+  'print': 'Affiche un résultat à l\'écran.',
+  'len': 'Renvoie le nombre d\'éléments d\'une liste.',
+  'sum': 'Additionne les éléments d\'une liste, ou superpose des figures géométriques.',
+  'show': 'Affiche une figure géométrique construite.'
+};
+
+const COMMAND_EXAMPLES = [
+  // -- Général --
+  { term:'print', def:'Affiche un résultat à l\'écran.', example:'print(2 + 3)', output:'5' },
+
+  // -- Algèbre / nombres --
+  { term:'is_prime', def:'Teste si un nombre est premier.', example:'is_prime(47)', output:'True' },
+  { term:'next_prime', def:'Renvoie le plus petit nombre premier strictement supérieur à celui donné.', example:'next_prime(20)', output:'23' },
+  { term:'random_prime', def:'Tire un nombre premier au hasard dans un intervalle.', example:'random_prime(100)', output:'71  (change à chaque exécution)' },
+  { term:'randint', def:'Tire un entier au hasard entre deux bornes, incluses.', example:'randint(1, 6)', output:'4  (change à chaque exécution)' },
+  { term:'factor', def:'Donne la décomposition en facteurs premiers.', example:'factor(60)', output:'2^2 * 3 * 5' },
+  { term:'divisors', def:'Renvoie la liste des diviseurs positifs d\'un nombre.', example:'divisors(35)', output:'[1, 5, 7, 35]' },
+  { term:'sum', def:'Additionne les éléments d\'une liste, ou superpose des figures géométriques.', example:'sum([1,2,3])', output:'6' },
+  { term:'division and remainder', def:'// donne le quotient entier d\'une division, % donne son reste.', example:'print(17 // 5)\nprint(17 % 5)', output:'3\n2' },
+  { term:'solve', def:'Résout une équation symboliquement.', example:'solve(x^2 - 4 == 0, x)', output:'[x == -2, x == 2]' },
+  { term:'expand', def:'Développe une expression algébrique.', example:'expand((x+1)^2)', output:'x^2 + 2*x + 1' },
+
+  // -- Géométrie --
+  { term:'circle', def:'Affiche un cercle bleu de centre (0,0) et de rayon 3.', example:"circle((0,0), 3, color='blue')", output:'(affiche un cercle bleu)' },
+  { term:'polygon', def:'Affiche le triangle vert de sommets (0,0), (1,0), (0,1).', example:"polygon([(0,0),(1,0),(0,1)], color='green')", output:'(affiche un triangle vert rempli)' },
+  { term:'point', def:'Affiche un point rouge de coordonnées (2,3).', example:"point((2,3), size=50, color='red')", output:'(affiche un point rouge)' },
+  { term:'points', def:'Affiche les trois points de coordonnées (0,0), (1,2), (2,1).', example:'points([(0,0),(1,2),(2,1)])', output:'(affiche trois points)' },
+  { term:'line', def:'Affiche le segment d\'extrémités (0,0) et (2,2).', example:'line([(0,0),(2,2)])', output:'(affiche un segment)' },
+
+  // -- Structures logiques --
+  { term:'liste', def:'Une liste regroupe plusieurs valeurs entre crochets.', example:'L = [1, 2, 3]\nprint(L)', output:'[1, 2, 3]' },
+  { term:'append', def:'Ajoute un élément à la fin d\'une liste.', example:'L = [1, 2, 3]\nL.append(4)\nprint(L)', output:'[1, 2, 3, 4]' },
+  { term:'len', def:'Renvoie le nombre d\'éléments d\'une liste.', example:'len([1,2,3])', output:'3' },
+  { term:'range', def:'Génère une suite d\'entiers, du début (inclus) à la fin (exclue).', example:'list(range(4, 10))', output:'[4, 5, 6, 7, 8, 9]' },
+  { term:'for', def:'Répète des instructions pour chaque élément d\'une liste ou d\'un range.', example:'for i in range(3):\n    print(i)', output:'0\n1\n2' },
+  { term:'if', def:'Exécute des instructions seulement si une condition est vraie.', example:'if 7 % 2 == 1:\n    print("impair")', output:'impair' }
+];
+
+const SECTION_LABELS = {
+  arithmetique: 'Arithmétique',
+  geometrie: 'Géométrie',
+  logique: 'Structures logiques',
+  fonctions: 'Fonctions'
+};
+
+const sectionMeta = {
+  arithmetique: { total:0, correct:0 },
+  geometrie: { total:0, correct:0 },
+  logique: { total:0, correct:0 },
+  fonctions: { total:0, correct:0 }
+};
+const answeredCorrect = new Set();
+
+function sectionOf(containerId){
+  if (containerId.indexOf('q-arith') === 0) return 'arithmetique';
+  if (containerId.indexOf('q-geo') === 0) return 'geometrie';
+  if (containerId.indexOf('q-log') === 0) return 'logique';
+  if (containerId.indexOf('q-fn') === 0) return 'fonctions';
+  return null;
+}
+
+function registerQuestion(containerId){
+  const s = sectionOf(containerId);
+  if (s) sectionMeta[s].total++;
+}
+
+function updateLevelMap(){
+  Object.keys(sectionMeta).forEach(s => {
+    const node = document.querySelector('.level-node[data-target="' + s + '"]');
+    if (!node) return;
+    const meta = sectionMeta[s];
+    const completed = meta.total > 0 && meta.correct >= meta.total;
+    const started = meta.correct > 0;
+    node.classList.toggle('completed', completed);
+    node.classList.toggle('in-progress', started && !completed);
+    const circle = node.querySelector('.level-circle');
+    circle.textContent = completed ? '✓' : node.dataset.num;
+  });
+}
+
+function markCorrect(containerId){
+  const s = sectionOf(containerId);
+  if (!s || answeredCorrect.has(containerId)) return;
+  answeredCorrect.add(containerId);
+  sectionMeta[s].correct++;
+  updateLevelMap();
+}
+
+let mascotTimer = null;
+function mascotReact(correct){
+  const bubble = document.getElementById('mascot-bubble');
+  const avatar = document.getElementById('mascot-avatar');
+  if (!bubble || !avatar) return;
+  const goodMsgs = ['Bien joué !', 'Exactement ça !', 'Tu assures !', 'Parfait !', 'Impeccable !'];
+  const badMsgs = ['Presque !', 'Réessaie !', 'Pas tout à fait...', 'On y retourne !'];
+  const msgs = correct ? goodMsgs : badMsgs;
+  bubble.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+  bubble.classList.add('show');
+  avatar.classList.remove('mascot-bounce', 'mascot-shake');
+  void avatar.offsetWidth;
+  avatar.classList.add(correct ? 'mascot-bounce' : 'mascot-shake');
+  clearTimeout(mascotTimer);
+  mascotTimer = setTimeout(() => bubble.classList.remove('show'), 2400);
+}
+
+/* ---------- En-tête cliquable partagé (accordéon) ---------- */
+function makeQHeader(kindText){
+  const header = el('button','qheader');
+  header.type = 'button';
+  header.setAttribute('aria-expanded', 'false');
+  const titleWrap = el('span','qheader-title');
+  titleWrap.appendChild(el('span','qkind', kindText));
+  header.appendChild(titleWrap);
+  header.appendChild(el('span','chevron','⌄'));
+  return header;
+}
+function wireCollapsible(card, header){
+  header.addEventListener('click', () => {
+    const expanded = card.classList.toggle('expanded');
+    header.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  });
+}
+
+/* ---------- MCQ renderer : sélection puis bouton "Vérifier" ---------- */
+function renderMCQ(containerId, opts){
+  registerQuestion(containerId);
+  const host = document.getElementById(containerId);
+  const card = el('div','quiz qcard');
+
+  const header = makeQHeader(opts.kind);
+  card.appendChild(header);
+  const body = el('div','qbody');
+
+  if (opts.code){
+    const cell = el('div','cell');
+    cell.appendChild(el('div','cell-in', opts.code));
+    if (opts.codeOut !== undefined){
+      cell.appendChild(el('div','cell-out', opts.codeOut));
+    }
+    body.appendChild(cell);
+  }
+
+  if (opts.preview){
+    renderGeoPreview(body, opts.preview.shapes, opts.preview.range);
+  }
+
+  body.appendChild(el('div','qtext', opts.question));
+
+  const optionsWrap = el('div', opts.optionsLayout === 'row' ? 'options options-row' : 'options');
+  const letters = ['A','B','C','D','E'];
+  let selected = null;
+  let checked = false;
+
+  const optEls = opts.choices.map((choice, i) => {
+    const btn = el('button','opt');
+    btn.type = 'button';
+    const bullet = el('span','bullet', letters[i]);
+    const label = el('span','', choice.text);
+    btn.appendChild(bullet);
+    btn.appendChild(label);
+    optionsWrap.appendChild(btn);
+    return btn;
+  });
+
+  body.appendChild(optionsWrap);
+
+  const actions = el('div','qactions');
+  const verifyBtn = el('button','btn','Vérifier ma réponse');
+  verifyBtn.type = 'button';
+  verifyBtn.disabled = true;
+  const retryBtn = el('button','btn ghost','Réessayer');
+  retryBtn.type = 'button';
+  retryBtn.style.display = 'none';
+  actions.appendChild(verifyBtn);
+  actions.appendChild(retryBtn);
+  body.appendChild(actions);
+
+  const feedback = el('div','feedback');
+  body.appendChild(feedback);
+
+  optEls.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      if (checked) return;
+      optEls.forEach(o => o.classList.remove('selected'));
+      btn.classList.add('selected');
+      selected = i;
+      verifyBtn.disabled = false;
+    });
+  });
+
+  verifyBtn.addEventListener('click', () => {
+    if (selected === null || checked) return;
+    checked = true;
+    optEls.forEach(o => o.classList.add('locked'));
+    const chosen = optEls[selected];
+    const isCorrect = opts.choices[selected].correct;
+
+    if (isCorrect){
+      chosen.classList.remove('selected');
+      chosen.classList.add('correct');
+      feedback.className = 'feedback good show';
+      feedback.innerHTML = '<b>Correct.</b> ' + (opts.explain || '');
+    } else {
+      chosen.classList.remove('selected');
+      chosen.classList.add('wrong');
+      feedback.className = 'feedback bad show';
+      feedback.innerHTML = '<b>Pas tout à fait.</b> ' + (opts.explain || '');
+      optEls.forEach((o, j) => { if (opts.choices[j].correct) o.classList.add('correct'); });
+    }
+    mascotReact(isCorrect);
+    if (isCorrect) markCorrect(containerId);
+    optEls.forEach(o => {
+      if (!o.classList.contains('correct') && !o.classList.contains('wrong')) o.classList.add('dim');
+    });
+    verifyBtn.style.display = 'none';
+    retryBtn.style.display = 'inline-block';
+  });
+
+  retryBtn.addEventListener('click', () => {
+    checked = false;
+    selected = null;
+    feedback.classList.remove('show');
+    optEls.forEach(o => o.classList.remove('correct','wrong','dim','locked','selected'));
+    verifyBtn.disabled = true;
+    verifyBtn.style.display = 'inline-block';
+    retryBtn.style.display = 'none';
+  });
+
+  card.appendChild(body);
+  wireCollapsible(card, header);
+  host.appendChild(card);
+}
+
+/* ---------- Drag-to-order renderer ---------- */
+function renderDragOrder(containerId, opts){
+  registerQuestion(containerId);
+  const host = document.getElementById(containerId);
+  const card = el('div','dragquiz qcard');
+
+  const header = makeQHeader(opts.kind);
+  card.appendChild(header);
+  const body = el('div','qbody');
+
+  body.appendChild(el('div','qtext', opts.question));
+  if (opts.hint) body.appendChild(el('div','qhint', opts.hint));
+
+  const list = el('div','draglist');
+  body.appendChild(list);
+
+  const shuffled = opts.items.slice();
+  for (let i = shuffled.length - 1; i > 0; i--){
+    const j = (i * 7 + 3) % (i + 1);
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  function buildItems(order){
+    list.innerHTML = '';
+    order.forEach((text) => {
+      const item = el('div','dragitem');
+      item.appendChild(el('span','handle','⠿'));
+      const idx = el('span','idx','');
+      item.appendChild(idx);
+      const label = el('span','', text);
+      item.dataset.text = text;
+      item.appendChild(label);
+      list.appendChild(item);
+    });
+    renumber();
+  }
+
+  function renumber(){
+    [...list.children].forEach((item, i) => {
+      item.querySelector('.idx').textContent = (i+1) + '.';
+    });
+  }
+
+  buildItems(shuffled);
+
+  let dragEl = null;
+
+  list.addEventListener('pointerdown', (e) => {
+    const item = e.target.closest('.dragitem');
+    if (!item) return;
+    dragEl = item;
+    dragEl.classList.add('dragging');
+    dragEl.setPointerCapture(e.pointerId);
+  });
+
+  list.addEventListener('pointermove', (e) => {
+    if (!dragEl) return;
+    const items = [...list.children];
+    const dragIdx = items.indexOf(dragEl);
+    const y = e.clientY;
+
+    for (let i = 0; i < items.length; i++){
+      if (items[i] === dragEl) continue;
+      const rect = items[i].getBoundingClientRect();
+      const mid = rect.top + rect.height/2;
+      if (y < mid && i < dragIdx){
+        list.insertBefore(dragEl, items[i]);
+        renumber();
+        break;
+      }
+      if (y > mid && i > dragIdx){
+        list.insertBefore(dragEl, items[i].nextSibling);
+        renumber();
+        break;
+      }
+    }
+  });
+
+  function endDrag(){
+    if (!dragEl) return;
+    dragEl.classList.remove('dragging');
+    dragEl = null;
+  }
+  list.addEventListener('pointerup', endDrag);
+  list.addEventListener('pointercancel', endDrag);
+
+  const btnRow = el('div','qactions');
+  const checkBtn = el('button','btn','Vérifier l\'ordre');
+  const resetBtn = el('button','btn ghost','Mélanger à nouveau');
+  btnRow.appendChild(checkBtn);
+  btnRow.appendChild(resetBtn);
+  body.appendChild(btnRow);
+
+  const feedback = el('div','feedback');
+  body.appendChild(feedback);
+
+  checkBtn.addEventListener('click', () => {
+    const current = [...list.children].map(i => i.dataset.text);
+    const ok = current.every((t, i) => t === opts.items[i]);
+    [...list.children].forEach((item, i) => {
+      item.classList.remove('correct','wrong');
+      item.classList.add(item.dataset.text === opts.items[i] ? 'correct' : 'wrong');
+    });
+    feedback.className = 'feedback show ' + (ok ? 'good' : 'bad');
+    feedback.innerHTML = ok
+      ? '<b>Exactement le bon ordre.</b> ' + (opts.explain || '')
+      : '<b>Pas encore le bon ordre.</b> Les étapes en rouge ne sont pas à la bonne place — réessayez, ou mélangez à nouveau.';
+    mascotReact(ok);
+    if (ok) markCorrect(containerId);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    const re = opts.items.slice();
+    for (let i = re.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [re[i], re[j]] = [re[j], re[i]];
+    }
+    feedback.classList.remove('show');
+    buildItems(re);
+  });
+
+  card.appendChild(body);
+  wireCollapsible(card, header);
+  host.appendChild(card);
+}
+
+/* ---------- Matching renderer (gauche / droite) ---------- */
+function renderMatching(containerId, opts){
+  registerQuestion(containerId);
+  const host = document.getElementById(containerId);
+  const card = el('div','matchquiz qcard');
+
+  const header = makeQHeader(opts.kind);
+  card.appendChild(header);
+  const body = el('div','qbody');
+
+  body.appendChild(el('div','qtext', opts.question));
+  if (opts.hint) body.appendChild(el('div','qhint', opts.hint));
+
+  const grid = el('div','matchgrid');
+  const leftCol = el('div','matchcol');
+  const rightCol = el('div','matchcol');
+  leftCol.appendChild(el('div','collabel','Énoncés'));
+  rightCol.appendChild(el('div','collabel','Réponses'));
+  grid.appendChild(leftCol);
+  grid.appendChild(rightCol);
+  body.appendChild(grid);
+
+  const n = opts.pairs.length;
+  const leftEls = [];
+  const rightEls = [];
+
+  opts.pairs.forEach((p) => {
+    const item = el('button','matchitem');
+    item.type = 'button';
+    item.appendChild(el('span','badge',''));
+    item.appendChild(el('span','', p.left));
+    leftCol.appendChild(item);
+    leftEls.push(item);
+  });
+
+  const rightOrder = opts.pairs.map((p, i) => i);
+  for (let i = rightOrder.length - 1; i > 0; i--){
+    const j = (i * 5 + 2) % (i + 1);
+    [rightOrder[i], rightOrder[j]] = [rightOrder[j], rightOrder[i]];
+  }
+  rightOrder.forEach((pairId) => {
+    const item = el('button','matchitem');
+    item.type = 'button';
+    item.dataset.pairId = pairId;
+    item.appendChild(el('span','badge',''));
+    item.appendChild(el('span','', opts.pairs[pairId].right));
+    rightCol.appendChild(item);
+    rightEls.push(item);
+  });
+
+  let selectedLeft = null;
+  const leftAssignedPos = new Array(n).fill(null);
+  const rightAssignedLeft = new Array(n).fill(null);
+  let checked = false;
+
+  function clearAssignment(li, pos){
+    if (li !== null){
+      leftEls[li].querySelector('.badge').textContent = '';
+      leftEls[li].classList.remove('paired');
+    }
+    if (pos !== null){
+      rightEls[pos].querySelector('.badge').textContent = '';
+      rightEls[pos].classList.remove('paired');
+    }
+  }
+
+  leftEls.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      if (checked) return;
+      leftEls.forEach(l => l.classList.remove('selected'));
+      selectedLeft = i;
+      item.classList.add('selected');
+    });
+  });
+
+  rightEls.forEach((item, pos) => {
+    item.addEventListener('click', () => {
+      if (checked) return;
+      if (selectedLeft === null) return;
+
+      const prevLeftForThisRight = rightAssignedLeft[pos];
+      if (prevLeftForThisRight !== null && prevLeftForThisRight !== selectedLeft){
+        clearAssignment(prevLeftForThisRight, null);
+        leftAssignedPos[prevLeftForThisRight] = null;
+      }
+      const prevPosForSelected = leftAssignedPos[selectedLeft];
+      if (prevPosForSelected !== null && prevPosForSelected !== pos){
+        clearAssignment(null, prevPosForSelected);
+        rightAssignedLeft[prevPosForSelected] = null;
+      }
+
+      leftAssignedPos[selectedLeft] = pos;
+      rightAssignedLeft[pos] = selectedLeft;
+      const badgeTxt = (selectedLeft + 1);
+      leftEls[selectedLeft].querySelector('.badge').textContent = badgeTxt;
+      leftEls[selectedLeft].classList.add('paired');
+      item.querySelector('.badge').textContent = badgeTxt;
+      item.classList.add('paired');
+
+      leftEls[selectedLeft].classList.remove('selected');
+      selectedLeft = null;
+    });
+  });
+
+  const btnRow = el('div','qactions');
+  const checkBtn = el('button','btn','Vérifier les paires');
+  const resetBtn = el('button','btn ghost','Recommencer');
+  btnRow.appendChild(checkBtn);
+  btnRow.appendChild(resetBtn);
+  body.appendChild(btnRow);
+
+  const feedback = el('div','feedback');
+  body.appendChild(feedback);
+
+  checkBtn.addEventListener('click', () => {
+    let allOk = true;
+    leftEls.forEach((leftItem, i) => {
+      leftItem.classList.remove('correct','wrong');
+      const pos = leftAssignedPos[i];
+      const rightItem = pos === null ? null : rightEls[pos];
+      const ok = rightItem && parseInt(rightItem.dataset.pairId,10) === i;
+      if (!ok) allOk = false;
+      leftItem.classList.add(ok ? 'correct' : 'wrong');
+      if (rightItem){
+        rightItem.classList.remove('correct','wrong');
+        rightItem.classList.add(ok ? 'correct' : 'wrong');
+      }
+    });
+    checked = true;
+    feedback.className = 'feedback show ' + (allOk ? 'good' : 'bad');
+    feedback.innerHTML = allOk
+      ? '<b>Toutes les paires sont correctes.</b> ' + (opts.explain || '')
+      : '<b>Certaines paires ne sont pas correctes.</b> Les éléments en rouge sont mal associés (ou incomplets) — recommencez pour corriger.';
+    mascotReact(allOk);
+    if (allOk) markCorrect(containerId);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    checked = false;
+    selectedLeft = null;
+    leftEls.forEach((l,i) => { clearAssignment(i, null); l.classList.remove('selected','correct','wrong'); leftAssignedPos[i]=null; });
+    rightEls.forEach((r,pos) => { r.classList.remove('correct','wrong'); rightAssignedLeft[pos]=null; r.querySelector('.badge').textContent=''; r.classList.remove('paired'); });
+    feedback.classList.remove('show');
+  });
+
+  card.appendChild(body);
+  wireCollapsible(card, header);
+  host.appendChild(card);
+}
+
+/* ---------- SVG grid helper (repère avec quadrillage) ---------- */
+function svgEl(tag, attrs){
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+function buildGridSVG(range){
+  const W = 300, H = 300, margin = 18;
+  const scale = (W/2 - margin) / range;
+  const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: '300', height: '300' });
+
+  for (let i = -range; i <= range; i++){
+    const x = W/2 + i*scale;
+    svg.appendChild(svgEl('line', { x1:x, y1:0, x2:x, y2:H, class: i===0 ? 'axis-line' : 'grid-line' }));
+    const y = H/2 - i*scale;
+    svg.appendChild(svgEl('line', { x1:0, y1:y, x2:W, y2:y, class: i===0 ? 'axis-line' : 'grid-line' }));
+  }
+  for (let i = -range; i <= range; i += 2){
+    if (i === 0) continue;
+    const x = W/2 + i*scale;
+    const tx = svgEl('text', { x:x, y:H/2+12, class:'axis-label', 'text-anchor':'middle' });
+    tx.textContent = i;
+    svg.appendChild(tx);
+    const y = H/2 - i*scale;
+    const ty = svgEl('text', { x:W/2-8, y:y+3, class:'axis-label', 'text-anchor':'end' });
+    ty.textContent = i;
+    svg.appendChild(ty);
+  }
+
+  function toPx(x, y){ return { px: W/2 + x*scale, py: H/2 - y*scale }; }
+  function fromPx(px, py){ return { x: (px - W/2)/scale, y: (H/2 - py)/scale }; }
+  return { svg, toPx, fromPx, scale, W, H };
+}
+
+/* ---------- Dessine un ensemble de formes dans un repère SVG (réutilisé partout) ---------- */
+function buildShapesSVG(shapes, range){
+  range = range || 8;
+  const { svg, toPx, scale } = buildGridSVG(range);
+  shapes.forEach(s => {
+    if (s.type === 'circle'){
+      const c = toPx(s.cx, s.cy);
+      svg.appendChild(svgEl('circle', {
+        cx:c.px, cy:c.py, r: s.r*scale,
+        stroke: s.stroke || '#2f5fa8', 'stroke-width':2,
+        'stroke-opacity': s.strokeAlpha !== undefined ? s.strokeAlpha : 1,
+        fill: s.fill ? (s.stroke || '#2f5fa8') : 'none',
+        'fill-opacity': s.alpha !== undefined ? s.alpha : 0.28
+      }));
+    } else if (s.type === 'polygon'){
+      const pts = s.points.map(p => { const c = toPx(p[0], p[1]); return c.px + ',' + c.py; }).join(' ');
+      svg.appendChild(svgEl('polygon', {
+        points: pts,
+        stroke: s.stroke || '#b23a46', 'stroke-width':2,
+        fill: s.fill ? (s.stroke || '#b23a46') : 'none',
+        'fill-opacity': s.alpha !== undefined ? s.alpha : 0.28
+      }));
+    } else if (s.type === 'point'){
+      const c = toPx(s.x, s.y);
+      svg.appendChild(svgEl('circle', { cx:c.px, cy:c.py, r:4.5, fill: s.color || '#2f5fa8' }));
+      if (s.label){
+        const t = svgEl('text', { x:c.px+8, y:c.py-8, 'font-family':'JetBrains Mono, monospace', 'font-size':12, 'font-weight':700, fill: s.color || '#2f5fa8' });
+        t.textContent = s.label;
+        svg.appendChild(t);
+      }
+    } else if (s.type === 'segment'){
+      const c1 = toPx(s.from[0], s.from[1]);
+      const c2 = toPx(s.to[0], s.to[1]);
+      svg.appendChild(svgEl('line', { x1:c1.px, y1:c1.py, x2:c2.px, y2:c2.py, stroke: s.color || '#2f5fa8', 'stroke-width':2 }));
+    } else if (s.type === 'curve'){
+      const steps = s.steps || 60;
+      const pts = [];
+      for (let i = 0; i <= steps; i++){
+        const x = s.xMin + (s.xMax - s.xMin) * i / steps;
+        const y = s.fn(x);
+        const c = toPx(x, y);
+        pts.push(c.px + ',' + c.py);
+      }
+      const attrs = {
+        points: pts.join(' '),
+        fill:'none',
+        stroke: s.color || '#2f5fa8',
+        'stroke-width':2.4
+      };
+      if (s.dashed) attrs['stroke-dasharray'] = '7,6';
+      svg.appendChild(svgEl('polyline', attrs));
+    }
+  });
+  return svg;
+}
+
+/* ---------- Live geometry preview (rendu SVG statique sous une cellule de code) ---------- */
+function renderGeoPreview(hostEl, shapes, range){
+  const wrap = el('div','geopreview');
+  wrap.appendChild(buildShapesSVG(shapes, range));
+  hostEl.appendChild(wrap);
+}
+
+/* ---------- Canevas interactif : placer le centre d'un point ---------- */
+function renderGeoCanvasCenter(containerId, opts){
+  registerQuestion(containerId);
+  const host = document.getElementById(containerId);
+  const card = el('div','canvasquiz qcard');
+  const header = makeQHeader(opts.kind);
+  card.appendChild(header);
+  const body = el('div','qbody');
+  if (opts.code){
+    const cell = el('div','cell');
+    cell.appendChild(el('div','cell-in', opts.code));
+    body.appendChild(cell);
+  }
+  body.appendChild(el('div','qtext', opts.question));
+  if (opts.hint) body.appendChild(el('div','qhint', opts.hint));
+
+  const range = opts.range || 8;
+  const { svg, toPx, fromPx } = buildGridSVG(range);
+
+  const startX = 0, startY = 0;
+  let cur = { x:startX, y:startY };
+  const p0 = toPx(startX, startY);
+  const marker = svgEl('circle', { cx:p0.px, cy:p0.py, r:6, fill:'#1d5fa3', stroke:'#fff', 'stroke-width':1.5, class:'drag-marker' });
+  svg.appendChild(marker);
+
+  const wrap = el('div','canvas-wrap');
+  wrap.appendChild(svg);
+  body.appendChild(wrap);
+
+  let dragging = false;
+  marker.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    marker.setPointerCapture(e.pointerId);
+  });
+  svg.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const rect = svg.getBoundingClientRect();
+    const scaleFactor = svg.viewBox.baseVal.width / rect.width;
+    const px = (e.clientX - rect.left) * scaleFactor;
+    const py = (e.clientY - rect.top) * scaleFactor;
+    const clampedPx = Math.max(0, Math.min(300, px));
+    const clampedPy = Math.max(0, Math.min(300, py));
+    marker.setAttribute('cx', clampedPx);
+    marker.setAttribute('cy', clampedPy);
+    cur = fromPx(clampedPx, clampedPy);
+  });
+  function stopDrag(){ dragging = false; }
+  svg.addEventListener('pointerup', stopDrag);
+  svg.addEventListener('pointercancel', stopDrag);
+
+  const actions = el('div','qactions');
+  const verifyBtn = el('button','btn','Vérifier ma position');
+  verifyBtn.type = 'button';
+  const retryBtn = el('button','btn ghost','Réessayer');
+  retryBtn.type = 'button';
+  retryBtn.style.display = 'none';
+  actions.appendChild(verifyBtn);
+  actions.appendChild(retryBtn);
+  body.appendChild(actions);
+
+  const feedback = el('div','feedback');
+  body.appendChild(feedback);
+
+  verifyBtn.addEventListener('click', () => {
+    const dist = Math.hypot(cur.x - opts.target.x, cur.y - opts.target.y);
+    const ok = dist <= (opts.tolerance || 0.6);
+    if (ok){
+      marker.setAttribute('fill', '#2e7d5b');
+      feedback.className = 'feedback good show';
+      feedback.innerHTML = '<b>Correct.</b> ' + (opts.explain || '');
+    } else {
+      marker.setAttribute('fill', '#ad3b46');
+      const t = toPx(opts.target.x, opts.target.y);
+      const targetMark = svgEl('circle', { cx:t.px, cy:t.py, r:6, fill:'none', stroke:'#2e7d5b', 'stroke-width':2, 'stroke-dasharray':'3,3' });
+      svg.appendChild(targetMark);
+      feedback.className = 'feedback bad show';
+      feedback.innerHTML = '<b>Pas encore.</b> Le cercle en pointillés vert montre la position exacte. ' + (opts.explain || '');
+    }
+    mascotReact(ok);
+    if (ok) markCorrect(containerId);
+    verifyBtn.style.display = 'none';
+    retryBtn.style.display = 'inline-block';
+  });
+
+  retryBtn.addEventListener('click', () => {
+    marker.setAttribute('fill', '#1d5fa3');
+    marker.setAttribute('cx', p0.px);
+    marker.setAttribute('cy', p0.py);
+    cur = { x:startX, y:startY };
+    [...svg.querySelectorAll('circle[stroke-dasharray]')].forEach(n => n.remove());
+    feedback.classList.remove('show');
+    verifyBtn.style.display = 'inline-block';
+    retryBtn.style.display = 'none';
+  });
+
+  card.appendChild(body);
+  wireCollapsible(card, header);
+  host.appendChild(card);
+}
+
+/* ---------- Canevas interactif : ajuster un rayon avec un curseur ---------- */
+function renderGeoCanvasRadius(containerId, opts){
+  registerQuestion(containerId);
+  const host = document.getElementById(containerId);
+  const card = el('div','canvasquiz qcard');
+  const header = makeQHeader(opts.kind);
+  card.appendChild(header);
+  const body = el('div','qbody');
+  if (opts.code){
+    const cell = el('div','cell');
+    cell.appendChild(el('div','cell-in', opts.code));
+    body.appendChild(cell);
+  }
+  body.appendChild(el('div','qtext', opts.question));
+  if (opts.hint) body.appendChild(el('div','qhint', opts.hint));
+
+  const range = opts.range || 8;
+  const { svg, toPx, scale } = buildGridSVG(range);
+  const center = toPx(opts.center.x, opts.center.y);
+
+  svg.appendChild(svgEl('circle', { cx:center.px, cy:center.py, r:3, fill:'#1d5fa3' }));
+  const startR = opts.min !== undefined ? opts.min : 1;
+  const circle = svgEl('circle', { cx:center.px, cy:center.py, r: startR*scale, fill:'none', stroke:'#1d5fa3', 'stroke-width':2.25 });
+  svg.appendChild(circle);
+
+  const wrap = el('div','canvas-wrap');
+  wrap.appendChild(svg);
+  body.appendChild(wrap);
+
+  const sliderRow = el('div','slider-row');
+  const slider = document.createElement('input');
+  slider.type = 'range';
+  slider.min = opts.min !== undefined ? opts.min : 1;
+  slider.max = opts.max !== undefined ? opts.max : 8;
+  slider.step = opts.step !== undefined ? opts.step : 0.5;
+  slider.value = startR;
+  const valLabel = el('span','slider-val', 'r = ' + startR);
+  sliderRow.appendChild(slider);
+  sliderRow.appendChild(valLabel);
+  body.appendChild(sliderRow);
+
+  slider.addEventListener('input', () => {
+    const v = parseFloat(slider.value);
+    circle.setAttribute('r', v*scale);
+    valLabel.textContent = 'r = ' + v;
+  });
+
+  const actions = el('div','qactions');
+  const verifyBtn = el('button','btn','Vérifier le rayon');
+  verifyBtn.type = 'button';
+  const retryBtn = el('button','btn ghost','Réessayer');
+  retryBtn.type = 'button';
+  retryBtn.style.display = 'none';
+  actions.appendChild(verifyBtn);
+  actions.appendChild(retryBtn);
+  body.appendChild(actions);
+
+  const feedback = el('div','feedback');
+  body.appendChild(feedback);
+
+  verifyBtn.addEventListener('click', () => {
+    const v = parseFloat(slider.value);
+    const ok = Math.abs(v - opts.target) <= (opts.tolerance || 0.26);
+    circle.setAttribute('stroke', ok ? '#2e7d5b' : '#ad3b46');
+    feedback.className = 'feedback show ' + (ok ? 'good' : 'bad');
+    feedback.innerHTML = ok
+      ? '<b>Correct.</b> ' + (opts.explain || '')
+      : '<b>Pas encore.</b> Ajustez le curseur et réessayez. ' + (opts.explain || '');
+    mascotReact(ok);
+    if (ok) markCorrect(containerId);
+    slider.disabled = true;
+    verifyBtn.style.display = 'none';
+    retryBtn.style.display = 'inline-block';
+  });
+
+  retryBtn.addEventListener('click', () => {
+    slider.disabled = false;
+    slider.value = startR;
+    circle.setAttribute('r', startR*scale);
+    circle.setAttribute('stroke', '#1d5fa3');
+    valLabel.textContent = 'r = ' + startR;
+    feedback.classList.remove('show');
+    verifyBtn.style.display = 'inline-block';
+    retryBtn.style.display = 'none';
+  });
+
+  card.appendChild(body);
+  wireCollapsible(card, header);
+  host.appendChild(card);
+}
+
+/* ---------- Mini-éditeur "complète le code" ---------- */
+function renderCodeFill(containerId, opts){
+  registerQuestion(containerId);
+  const host = document.getElementById(containerId);
+  const card = el('div','fillquiz qcard');
+
+  const header = makeQHeader(opts.kind);
+  card.appendChild(header);
+  const body = el('div','qbody');
+  body.appendChild(el('div','qtext', opts.question));
+
+  const cell = el('div','cell');
+  const cellIn = el('div','cell-in');
+  cellIn.innerHTML = opts.codeHtml;
+  cell.appendChild(cellIn);
+
+  const cellOut = el('div','cell-out fill-out', opts.codeOut || '');
+  cell.appendChild(cellOut);
+  body.appendChild(cell);
+
+  const inputs = opts.blanks.map(b => cellIn.querySelector(`[data-id="${b.id}"]`));
+
+  const actions = el('div','qactions');
+  const verifyBtn = el('button','btn', opts.runLabel || 'Vérifier et exécuter');
+  verifyBtn.type = 'button';
+  const retryBtn = el('button','btn ghost','Réessayer');
+  retryBtn.type = 'button';
+  retryBtn.style.display = 'none';
+  actions.appendChild(verifyBtn);
+  actions.appendChild(retryBtn);
+  body.appendChild(actions);
+
+  const feedback = el('div','feedback');
+  body.appendChild(feedback);
+
+  verifyBtn.addEventListener('click', () => {
+    let allOk = true;
+    opts.blanks.forEach((b, i) => {
+      const input = inputs[i];
+      const val = (input.value || '').trim().toLowerCase();
+      const ok = b.accept.some(a => a.toLowerCase() === val);
+      input.classList.toggle('correct', ok);
+      input.classList.toggle('wrong', !ok);
+      if (!ok) allOk = false;
+    });
+    if (allOk){
+      cellOut.classList.add('show');
+      feedback.className = 'feedback good show';
+      feedback.innerHTML = '<b>Correct.</b> ' + (opts.explain || '');
+      inputs.forEach(i => i.disabled = true);
+      verifyBtn.style.display = 'none';
+      retryBtn.style.display = 'inline-block';
+    } else {
+      cellOut.classList.remove('show');
+      feedback.className = 'feedback bad show';
+      feedback.innerHTML = '<b>Pas encore correct.</b> Les cases en rouge ne sont pas les bonnes — corrigez-les et vérifiez à nouveau.';
+    }
+    mascotReact(allOk);
+    if (allOk) markCorrect(containerId);
+  });
+
+  retryBtn.addEventListener('click', () => {
+    inputs.forEach(i => { i.disabled = false; i.value = ''; i.classList.remove('correct','wrong'); });
+    cellOut.classList.remove('show');
+    feedback.classList.remove('show');
+    verifyBtn.style.display = 'inline-block';
+    retryBtn.style.display = 'none';
+  });
+
+  card.appendChild(body);
+  wireCollapsible(card, header);
+  host.appendChild(card);
+}
+
+/* ---------- Choix par image (cliquer directement sur la bonne figure) ---------- */
+function renderImageChoice(containerId, opts){
+  registerQuestion(containerId);
+  const host = document.getElementById(containerId);
+  const card = el('div','imgchoicequiz qcard');
+
+  const header = makeQHeader(opts.kind);
+  card.appendChild(header);
+  const body = el('div','qbody');
+  if (opts.code){
+    const cell = el('div','cell');
+    cell.appendChild(el('div','cell-in', opts.code));
+    body.appendChild(cell);
+  }
+  body.appendChild(el('div','qtext', opts.question));
+
+  const grid = el('div','imgchoice-grid');
+  body.appendChild(grid);
+
+  let selected = null;
+  let checked = false;
+  const letters = ['A','B','C','D'];
+
+  const cardEls = opts.images.map((img, i) => {
+    const c = el('button','imgchoice-card');
+    c.type = 'button';
+    c.appendChild(buildShapesSVG(img.shapes, img.range || opts.range || 4));
+    c.appendChild(el('div','imgchoice-label', 'Figure ' + letters[i]));
+    grid.appendChild(c);
+    return c;
+  });
+
+  const actions = el('div','qactions');
+  const verifyBtn = el('button','btn','Vérifier ma réponse');
+  verifyBtn.type = 'button';
+  verifyBtn.disabled = true;
+  const retryBtn = el('button','btn ghost','Réessayer');
+  retryBtn.type = 'button';
+  retryBtn.style.display = 'none';
+  actions.appendChild(verifyBtn);
+  actions.appendChild(retryBtn);
+  body.appendChild(actions);
+
+  const feedback = el('div','feedback');
+  body.appendChild(feedback);
+
+  cardEls.forEach((c, i) => {
+    c.addEventListener('click', () => {
+      if (checked) return;
+      cardEls.forEach(cc => cc.classList.remove('selected'));
+      c.classList.add('selected');
+      selected = i;
+      verifyBtn.disabled = false;
+    });
+  });
+
+  verifyBtn.addEventListener('click', () => {
+    if (selected === null || checked) return;
+    checked = true;
+    cardEls.forEach(c => c.classList.add('locked'));
+    const chosen = cardEls[selected];
+    const isCorrect = opts.images[selected].correct;
+
+    if (isCorrect){
+      chosen.classList.remove('selected');
+      chosen.classList.add('correct');
+      feedback.className = 'feedback good show';
+      feedback.innerHTML = '<b>Correct.</b> ' + (opts.explain || '');
+    } else {
+      chosen.classList.remove('selected');
+      chosen.classList.add('wrong');
+      feedback.className = 'feedback bad show';
+      feedback.innerHTML = '<b>Pas tout à fait.</b> ' + (opts.explain || '');
+      cardEls.forEach((c, j) => { if (opts.images[j].correct) c.classList.add('correct'); });
+    }
+    cardEls.forEach(c => {
+      if (!c.classList.contains('correct') && !c.classList.contains('wrong')) c.classList.add('dim');
+    });
+    mascotReact(isCorrect);
+    if (isCorrect) markCorrect(containerId);
+    verifyBtn.style.display = 'none';
+    retryBtn.style.display = 'inline-block';
+  });
+
+  retryBtn.addEventListener('click', () => {
+    checked = false;
+    selected = null;
+    feedback.classList.remove('show');
+    cardEls.forEach(c => c.classList.remove('correct','wrong','dim','locked','selected'));
+    verifyBtn.disabled = true;
+    verifyBtn.style.display = 'inline-block';
+    retryBtn.style.display = 'none';
+  });
+
+  card.appendChild(body);
+  wireCollapsible(card, header);
+  host.appendChild(card);
+}
+
+/* ---------- Tutoriel pas-à-pas (mini-fenêtre fermable, en haut de chaque section) ----------
+opts: {
+  num, title, intro,
+  range          (optionnel — active un visuel géométrique live),
+  lines          (optionnel — code fixe en plusieurs lignes, avec steps[i].active pour surligner)
+  steps: [{
+    active: [lineIdx,...]   (si opts.lines est fourni)
+    code: 'html'            (sinon — remplace tout le bloc de code à chaque étape)
+    shapes: [...]           (optionnel — redessine le visuel géométrique)
+    vars: {nom:valeur}      (optionnel)
+    note: 'texte'
+    output: 'texte'         (optionnel — affiché en encadré "Sortie")
+  }]
+}
+------------------------------------------------------------------------------------------- */
+function renderTutorial(containerId, opts){
+  const host = document.getElementById(containerId);
+  const winCard = el('div','tutorial-window');
+
+  const titlebar = el('div','tutorial-titlebar');
+  titlebar.setAttribute('role','button');
+  titlebar.setAttribute('tabindex','0');
+  titlebar.setAttribute('aria-expanded','false');
+  titlebar.appendChild(el('div','tutorial-title', `Tutoriel ${opts.num} — ${opts.title}`));
+  const tutActions = el('div','tutorial-actions');
+  const tutChevron = el('span','chevron tutorial-chevron','⌄');
+  tutActions.appendChild(tutChevron);
+  const closeBtn = el('button','tutorial-close','✕');
+  closeBtn.type = 'button';
+  closeBtn.setAttribute('aria-label','Réduire le tutoriel');
+  tutActions.appendChild(closeBtn);
+  titlebar.appendChild(tutActions);
+  winCard.appendChild(titlebar);
+
+  const body = el('div','tutorial-body');
+  winCard.appendChild(body);
+
+  if (opts.intro) body.appendChild(el('div','tutorial-intro', opts.intro));
+
+  let geoHost = null;
+  if (opts.range !== undefined){
+    geoHost = el('div','geopreview');
+    body.appendChild(geoHost);
+  }
+
+  const codeBox = el('div','trace-code');
+  body.appendChild(codeBox);
+  let lineEls = [];
+  if (opts.lines){
+    lineEls = opts.lines.map((html, i) => {
+      const line = el('div','trace-line', html);
+      line.dataset.line = i;
+      codeBox.appendChild(line);
+      return line;
+    });
+  }
+
+  const panel = el('div','trace-panel');
+  const varsBox = el('div','trace-vars');
+  const noteBox = el('div','trace-note');
+  panel.appendChild(varsBox);
+  panel.appendChild(noteBox);
+  body.appendChild(panel);
+
+  const controls = el('div','trace-controls');
+  const prevBtn = el('button','btn ghost','◀ Précédent');
+  prevBtn.type = 'button';
+  const stepCount = el('span','step-count','');
+  const nextBtn = el('button','btn','Suivant ▶');
+  nextBtn.type = 'button';
+  controls.appendChild(prevBtn);
+  controls.appendChild(stepCount);
+  controls.appendChild(nextBtn);
+  body.appendChild(controls);
+
+  const outBox = el('div','cell-out trace-out');
+  outBox.style.display = 'none';
+  body.appendChild(outBox);
+
+  let idx = 0;
+
+  function render(){
+    const step = opts.steps[idx];
+
+    if (opts.lines){
+      lineEls.forEach((line, i) => line.classList.toggle('active', step.active.includes(i)));
+    } else if (step.code !== undefined){
+      codeBox.innerHTML = step.code;
+    }
+
+    if (geoHost && step.shapes){
+      geoHost.innerHTML = '';
+      geoHost.appendChild(buildShapesSVG(step.shapes, opts.range));
+    }
+
+    varsBox.innerHTML = '';
+    if (step.vars){
+      Object.keys(step.vars).forEach(name => {
+        const v = el('div','trace-var');
+        v.innerHTML = `<span class="vname">${name}</span>${step.vars[name]}`;
+        varsBox.appendChild(v);
+      });
+    }
+    noteBox.textContent = step.note || '';
+
+    stepCount.textContent = `Étape ${idx+1} / ${opts.steps.length}`;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === opts.steps.length - 1;
+
+    if (opts.cumulativeOutput){
+      const outputs = opts.steps.slice(0, idx+1).map(s => s.output).filter(o => o !== undefined);
+      if (outputs.length){
+        outBox.textContent = outputs.join('\n');
+        outBox.style.display = 'block';
+      } else {
+        outBox.style.display = 'none';
+      }
+    } else if (step.output !== undefined){
+      outBox.textContent = step.output;
+      outBox.style.display = 'block';
+    } else {
+      outBox.style.display = 'none';
+    }
+  }
+
+  prevBtn.addEventListener('click', () => { if (idx > 0){ idx--; render(); } });
+  nextBtn.addEventListener('click', () => { if (idx < opts.steps.length - 1){ idx++; render(); } });
+
+  function setExpanded(expanded){
+    winCard.classList.toggle('expanded', expanded);
+    titlebar.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
+  titlebar.addEventListener('click', (e) => {
+    if (e.target === closeBtn || closeBtn.contains(e.target)) return;
+    setExpanded(!winCard.classList.contains('expanded'));
+  });
+  titlebar.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      setExpanded(!winCard.classList.contains('expanded'));
+    }
+  });
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setExpanded(false);
+  });
+
+  render();
+  host.appendChild(winCard);
+}
+
+/* ============================================================
+   Contenu — Partie 1 : Arithmétique
+   ============================================================ */
+
+renderTutorial('tut-arith-1', {
+  num: 1,
+  title: 'Afficher un résultat avec print',
+  intro: 'Le mot-clé print affiche à l\'écran le résultat de ce qui se trouve entre ses parenthèses. Une ligne, un calcul, une sortie.',
+  lines: [
+    `<span class="kw">print</span>(<span class="num">2</span> + <span class="num">3</span>)`,
+    `<span class="kw">print</span>(<span class="num">10</span> - <span class="num">4</span>)`,
+    `<span class="kw">print</span>(<span class="num">6</span> * <span class="num">7</span>)`,
+    `<span class="kw">print</span>(<span class="str">'Ceci est une phrase.'</span>)`
+  ],
+  steps: [
+    { active:[0], note:'print() affiche le résultat de ce qui est entre parenthèses. Ici, Sage calcule 2 + 3.', output:'5' },
+    { active:[1], note:'Chaque appel à print() est indépendant : Sage calcule maintenant 10 - 4.', output:'6' },
+    { active:[2], note:'Et enfin 6 × 7.', output:'42' },
+    { active:[3], note:'print() peut aussi afficher du texte, pas seulement un calcul : entre guillemets, on obtient une chaîne de caractères.', output:'Ceci est une phrase.' }
+  ]
+});
+
+renderTutorial('tut-arith-2', {
+  num: 2,
+  title: 'is_prime, factor, divisors et nb_diviseurs',
+  intro: '<ul><li><span class="fn">is_prime()</span> répond simplement par True ou False.</li><li><span class="fn">factor()</span> donne la décomposition complète en facteurs premiers.</li><li><span class="fn">divisors()</span> liste tous les diviseurs.</li><li><span class="fn">nb_diviseurs()</span> compte combien il y en a.</li></ul>',
+  lines: [
+    `n = <span class="num">91</span>`,
+    `<span class="fn">is_prime</span>(n)`,
+    `<span class="fn">factor</span>(n)`,
+    `<span class="fn">divisors</span>(n)`,
+    `<span class="fn">nb_diviseurs</span>(n)`
+  ],
+  steps: [
+    { active:[0], vars:{ n:91 }, note:'On choisit un nombre, ici 91, et on le stocke dans la variable n.' },
+    { active:[1], vars:{ n:91 }, note:'is_prime(n) teste si n est premier.', output:'False' },
+    { active:[2], vars:{ n:91 }, note:'Puisqu\'il n\'est pas premier, factor(n) affiche sa décomposition en facteurs premiers.', output:'7 * 13' },
+    { active:[3], vars:{ n:91 }, note:'divisors(n) va plus loin : elle liste tous les diviseurs positifs de n, pas seulement les facteurs premiers.', output:'[1, 7, 13, 91]' },
+    { active:[4], vars:{ n:91 }, note:'nb_diviseurs(n) donne directement le nombre de diviseurs, sans les lister un par un.', output:'4' }
+  ]
+});
+
+renderMCQ('q-arith-1', {
+  kind: 'Vrai ou faux — exercice mental',
+  code: `<span class="fn">is_prime</span>(<span class="num">21</span>)`,
+  question: 'Sage teste si 21 est un nombre premier. Que renvoie ce test ?',
+  choices: [
+    { text: 'True — 21 est premier', correct: false },
+    { text: 'False — 21 n\'est pas premier', correct: true }
+  ],
+  explain: '21 = 3 × 7, donc 21 admet un diviseur autre que 1 et lui-même : is_prime(21) renvoie False.'
+});
+
+renderMCQ('q-arith-match', {
+  kind: 'Quelle est la sortie ?',
+  code: `<span class="fn">print</span>(<span class="fn">is_prime</span>(<span class="num">47</span>))
+<span class="fn">print</span>(<span class="fn">is_prime</span>(<span class="num">53</span>))
+<span class="fn">print</span>(<span class="fn">is_prime</span>(<span class="num">14</span>))
+<span class="fn">print</span>(<span class="fn">is_prime</span>(<span class="num">3</span>))`,
+  question: 'Quelle sera la sortie de ce programme ?',
+  optionsLayout: 'row',
+  choices: [
+    { text: '<span style="font-family:\'JetBrains Mono\',monospace;line-height:1.7">True<br>True<br>False<br>True</span>', correct: true },
+    { text: '<span style="font-family:\'JetBrains Mono\',monospace;line-height:1.7">True<br>False<br>False<br>True</span>', correct: false },
+    { text: '<span style="font-family:\'JetBrains Mono\',monospace;line-height:1.7">False<br>True<br>True<br>False</span>', correct: false }
+  ],
+  explain: '47 et 53 sont premiers (True), 14 = 2 × 7 ne l\'est pas (False), et 3 est premier (True) : la sortie est True, True, False, True.'
+});
+
+renderMCQ('q-arith-2', {
+  kind: 'Exercice mental',
+  code: `<span class="fn">factor</span>(70278157200970)`,
+  codeOut: `2 * 5 * 7027815720097`,
+  question: 'Combien ce nombre a-t-il de facteurs premiers distincts ?',
+  choices: [
+    { text: '2 facteurs premiers distincts', correct: false },
+    { text: '3 facteurs premiers distincts', correct: true },
+    { text: '5 facteurs premiers distincts', correct: false }
+  ],
+  explain: 'La sortie affiche trois facteurs séparés par des points : 2, 5 et 7027815720097, chacun avec un exposant 1.'
+});
+
+renderMCQ('q-arith-3', {
+  kind: 'Quelle est la sortie ?',
+  code: `<span class="fn">print</span>(<span class="fn">nb_diviseurs</span>(<span class="num">35</span>))`,
+  question: 'Sachant que 35 = 5 · 7 (deux exposants égaux à 1), que renvoie nb_diviseurs(35) ?',
+  choices: [
+    { text: '2', correct: false },
+    { text: '4', correct: true },
+    { text: '35', correct: false }
+  ],
+  explain: 'Les diviseurs de 35 sont 1, 5, 7 et 35.'
+});
+
+renderMCQ('q-arith-4', {
+  kind: 'Que vaut n à la sortie ? — exercice mental',
+  code: `n = <span class="num">17</span> + <span class="num">18</span> + <span class="num">19</span> + <span class="num">20</span>
+<span class="kw">print</span>(n % <span class="num">2</span>)`,
+  question: 'La somme de quatre entiers consécutifs — quelle est la parité du résultat affiché par n % 2 ?',
+  choices: [
+    { text: '0 — la somme est toujours paire', correct: true },
+    { text: '1 — la somme est toujours impaire', correct: false },
+    { text: 'Cela dépend du nombre de départ', correct: false }
+  ],
+  explain: '17+18+19+20 = 74. Quatre entiers consécutifs contiennent toujours deux pairs et deux impairs : leur somme est donc paire, et n % 2 vaut 0.'
+});
+
+/* ============================================================
+   Contenu — Partie 2 : Géométrie
+   ============================================================ */
+
+renderTutorial('tut-geo-1', {
+  num: 1,
+  title: 'Tracer un cercle, étape par étape',
+  intro: 'circle((centre), rayon, ...) accepte plusieurs paramètres : suivez comment chacun modifie le dessin, en direct.',
+  range: 6,
+  steps: [
+    {
+      code: `cercle = <span class="fn">circle</span>((<span class="num">0</span>,<span class="num">0</span>), <span class="num">1</span>, color=<span class="str">'blue'</span>)<br><span class="fn">show</span>(cercle)`,
+      shapes: [{ type:'circle', cx:0, cy:0, r:1, stroke:'#2f5fa8' }],
+      note: 'On commence simple : centre (0,0), rayon 1, couleur bleue.'
+    },
+    {
+      code: `cercle = <span class="fn">circle</span>((<span class="num">2</span>,<span class="num">1</span>), <span class="num">1</span>, color=<span class="str">'blue'</span>)<br><span class="fn">show</span>(cercle)`,
+      shapes: [{ type:'circle', cx:2, cy:1, r:1, stroke:'#2f5fa8' }],
+      note: 'Le premier argument est un couple (x, y) : en le changeant, on déplace le centre en (2, 1).'
+    },
+    {
+      code: `cercle = <span class="fn">circle</span>((<span class="num">2</span>,<span class="num">1</span>), <span class="num">3</span>, color=<span class="str">'blue'</span>)<br><span class="fn">show</span>(cercle)`,
+      shapes: [{ type:'circle', cx:2, cy:1, r:3, stroke:'#2f5fa8' }],
+      note: 'Le deuxième argument est le rayon : en le faisant passer à 3, le cercle grandit.'
+    },
+    {
+      code: `cercle = <span class="fn">circle</span>((<span class="num">2</span>,<span class="num">1</span>), <span class="num">3</span>, color=<span class="str">'red'</span>)<br><span class="fn">show</span>(cercle)`,
+      shapes: [{ type:'circle', cx:2, cy:1, r:3, stroke:'#b23a46' }],
+      note: 'color change simplement la couleur du contour, sans toucher à la position ni à la taille.'
+    },
+    {
+      code: `cercle = <span class="fn">circle</span>((<span class="num">2</span>,<span class="num">1</span>), <span class="num">3</span>, color=<span class="str">'red'</span>, fill=<span class="kw">True</span>)<br><span class="fn">show</span>(cercle)`,
+      shapes: [{ type:'circle', cx:2, cy:1, r:3, stroke:'#b23a46', fill:true, alpha:1 }],
+      note: 'Et fill=True remplit l\'intérieur du cercle avec cette même couleur.'
+    },
+    {
+      code: `cercle = <span class="fn">circle</span>((<span class="num">2</span>,<span class="num">1</span>), <span class="num">3</span>, color=<span class="str">'red'</span>, fill=<span class="kw">True</span>, alpha=<span class="num">0.4</span>)<br><span class="fn">show</span>(cercle)`,
+      shapes: [{ type:'circle', cx:2, cy:1, r:3, stroke:'#b23a46', fill:true, alpha:0.4, strokeAlpha:0.4 }],
+      note: 'alpha ajuste l\'opacité de la figure : avec alpha=0.4, le cercle devient plus transparent.'
+    }
+  ]
+});
+
+renderTutorial('tut-geo-2', {
+  num: 2,
+  title: 'Points, segment, triangle',
+  intro: 'On construit une figure en assemblant des briques : un point, puis un autre, puis le segment qui les relie, puis un triangle. Chaque étape ajoute une nouvelle instruction au dessin.',
+  range: 6,
+  steps: [
+    {
+      code: `P = <span class="fn">point</span>((<span class="num">1</span>, <span class="num">1</span>), size=<span class="num">50</span>, color=<span class="str">'red'</span>)<br><span class="fn">show</span>(P)`,
+      shapes: [{ type:'point', x:1, y:1, color:'#b23a46' }],
+      note: 'On dessine un premier point en (1, 1), avec size pour sa taille et color pour sa couleur.'
+    },
+    {
+      code: `P = <span class="fn">point</span>((<span class="num">1</span>, <span class="num">1</span>), size=<span class="num">50</span>, color=<span class="str">'red'</span>)<br>Q = <span class="fn">point</span>((<span class="num">4</span>, <span class="num">2</span>), size=<span class="num">50</span>, color=<span class="str">'red'</span>)<br><span class="fn">show</span>(P+Q)`,
+      shapes: [
+        { type:'point', x:1, y:1, color:'#b23a46' },
+        { type:'point', x:4, y:2, color:'#b23a46' }
+      ],
+      note: 'On dessine un second point en (4, 2).'
+    },
+    {
+      code: `L = <span class="fn">line</span>([(<span class="num">1</span>, <span class="num">1</span>), (<span class="num">4</span>, <span class="num">2</span>)])<br><span class="fn">show</span>(L)`,
+      shapes: [
+        { type:'segment', from:[1,1], to:[4,2], color:'#2f5fa8' }
+      ],
+      note: 'line() relie les deux points par un segment.'
+    },
+    {
+      code: `L = <span class="fn">polygon</span>([(<span class="num">1</span>, <span class="num">1</span>), (<span class="num">4</span>, <span class="num">2</span>), (<span class="num">2</span>, <span class="num">5</span>)])<br><span class="fn">show</span>(L)`,
+      shapes: [
+        { type:'polygon', points:[[1,1],[4,2],[2,5]], stroke:'#2f5fa8', fill:true, alpha:1 }
+      ],
+      note: 'polygon() avec trois points ferme la figure automatiquement et trace un triangle.'
+    },
+    {
+      code: `L = <span class="fn">polygon</span>([(<span class="num">1</span>, <span class="num">1</span>), (<span class="num">4</span>, <span class="num">2</span>), (<span class="num">2</span>, <span class="num">5</span>)], fill=<span class="kw">False</span>)<br><span class="fn">show</span>(L)`,
+      shapes: [
+        { type:'polygon', points:[[1,1],[4,2],[2,5]], stroke:'#2f5fa8', fill:false }
+      ],
+      note: 'fill=False désactive le remplissage : le polygone n\'est plus dessiné que par son contour.'
+    }
+  ]
+});
+
+renderMCQ('q-geo-0a', {
+  kind: 'Question simple',
+  code: `cercle = <span class="fn">circle</span>((<span class="num">3</span>,<span class="num">2</span>), <span class="num">5</span>, color=<span class="str">'blue'</span>)`,
+  question: 'Quel est le centre de ce cercle bleu ?',
+  choices: [
+    { text: 'Le point (3, 2)', correct: true },
+    { text: 'Le point (5, 3)', correct: false },
+    { text: 'Le point (2, 3)', correct: false }
+  ],
+  explain: 'Le premier argument de circle() est un couple (x, y) qui donne les coordonnées du centre — ici (3, 2).'
+});
+
+renderCodeFill('q-geo-0b', {
+  kind: 'Question simple',
+  question: 'Quel est le diamètre de ce cercle ?',
+  codeHtml: `cercle = <span class="fn">circle</span>((<span class="num">3</span>,<span class="num">2</span>), <span class="num">5</span>, color=<span class="str">'blue'</span>)
+diamètre = <input class="blank-input" data-id="b1" style="width:5ch" placeholder="?">`,
+  blanks: [{ id:'b1', accept:['10'] }],
+  runLabel: 'Vérifier ma réponse',
+  codeOut: 'diamètre = 10',
+  explain: 'Le deuxième argument (5) est le rayon. Le diamètre est toujours le double du rayon, donc 2 × 5 = 10.'
+});
+
+renderMCQ('q-geo-0c', {
+  kind: 'Question simple',
+  code: `carre = <span class="fn">polygon</span>([(<span class="num">6</span>,<span class="num">6</span>), (<span class="num">6</span>,-<span class="num">6</span>),
+    (-<span class="num">6</span>,-<span class="num">6</span>), (-<span class="num">6</span>,<span class="num">6</span>)])`,
+  question: 'Ce polygone a 4 sommets et ses côtés sont parallèles aux axes. Quelle est la longueur d\'un côté ?',
+  choices: [
+    { text: '6, la coordonnée utilisée dans chaque point', correct: false },
+    { text: '12, la distance entre deux sommets voisins comme (6,6) et (6,-6)', correct: true },
+    { text: '24, le périmètre total du carré', correct: false }
+  ],
+  explain: 'Entre (6,6) et (6,-6), seule la coordonnée y change : la distance est |6 -(-6)| = 12, la longueur d\'un côté.'
+});
+
+renderGeoCanvasCenter('q-geo-canvas-center', {
+  kind: 'Exercice interactif — canevas',
+  code: `cercle = <span class="fn">circle</span>((<span class="num">4</span>,-<span class="num">3</span>), <span class="num">2</span>, color=<span class="str">'blue'</span>)`,
+  question: 'Faites glisser le point bleu pour le placer exactement au centre de ce cercle.',
+  hint: 'Cliquez sur le point et déplacez-le sur le quadrillage, puis vérifiez.',
+  target: { x:4, y:-3 },
+  range: 8,
+  tolerance: 0.6,
+  explain: 'Le centre du cercle est donné par le premier argument de circle() : (4, -3).'
+});
+
+renderGeoCanvasRadius('q-geo-canvas-radius', {
+  kind: 'Exercice interactif — canevas',
+  code: `cercle = <span class="fn">circle</span>((<span class="num">0</span>,<span class="num">0</span>), <span class="num">5</span>, color=<span class="str">'blue'</span>)`,
+  question: 'Utilisez le curseur pour tracer le cercle qui correspond exactement à ce code.',
+  hint: 'Le point bleu au centre reste fixe en (0,0) ; seul le rayon change.',
+  center: { x:0, y:0 },
+  target: 5,
+  range: 8,
+  min: 1, max: 8, step: 0.5,
+  tolerance: 0.26,
+  explain: 'Le rayon contrôle la taille du cercle : plus il est grand, plus le cercle s\'étend loin du centre.'
+});
+
+renderImageChoice('q-geo-1', {
+  kind: 'Que voit-on à l\'écran ?',
+  code: `cercle = <span class="fn">circle</span>((<span class="num">0</span>,<span class="num">0</span>), <span class="num">2</span>, color=<span class="str">'blue'</span>)
+carre = <span class="fn">polygon</span>([(<span class="num">1</span>,<span class="num">1</span>),(<span class="num">1</span>,-<span class="num">1</span>),(-<span class="num">1</span>,-<span class="num">1</span>),(-<span class="num">1</span>,<span class="num">1</span>)],
+    fill=<span class="kw">False</span>, color=<span class="str">'red'</span>)
+<span class="fn">show</span>(cercle + carre, axes=<span class="kw">True</span>)`,
+  question: 'Cliquez sur la figure qui correspond exactement à ce code.',
+  range: 4,
+  images: [
+    {
+      shapes: [
+        { type:'circle', cx:0, cy:0, r:2, stroke:'#2f5fa8' },
+        { type:'polygon', points:[[1,1],[1,-1],[-1,-1],[-1,1]], stroke:'#b23a46', fill:false }
+      ],
+      correct: true
+    },
+    {
+      shapes: [
+        { type:'polygon', points:[[2,2],[2,-2],[-2,-2],[-2,2]], stroke:'#b23a46', fill:false },
+        { type:'circle', cx:0, cy:0, r:1, stroke:'#2f5fa8' }
+      ],
+      correct: false
+    },
+    {
+      shapes: [
+        { type:'circle', cx:0, cy:0, r:3.5, stroke:'#2f5fa8' },
+        { type:'polygon', points:[[1,1],[1,-1],[-1,-1],[-1,1]], stroke:'#b23a46', fill:false }
+      ],
+      correct: false
+    }
+  ],
+  explain: 'fill=False dessine uniquement le contour du carré (côté 2, sommets à ±1) : il reste petit et non rempli, inscrit dans le cercle de rayon 2. La figure B inverse les rôles (grand carré autour d\'un petit cercle) et la figure C a un rayon de cercle trop grand.'
+});
+
+renderImageChoice('q-geo-2', {
+  kind: 'Vrai ou faux',
+  code: `carre = <span class="fn">polygon</span>([(<span class="num">1</span>,<span class="num">1</span>),(<span class="num">1</span>,-<span class="num">1</span>),(-<span class="num">1</span>,-<span class="num">1</span>),(-<span class="num">1</span>,<span class="num">1</span>)],
+    fill=<span class="kw">True</span>, color=<span class="str">'red'</span>)
+cercle = <span class="fn">circle</span>((<span class="num">0</span>,<span class="num">0</span>), <span class="num">2</span>, color=<span class="str">'blue'</span>)
+<span class="fn">show</span>(carre+cercle)`,
+  question: 'D\'après le code, à quoi ressemble la figure ? Cliquez sur la bonne réponse.',
+  range: 4,
+  images: [
+    {
+      shapes: [
+        { type:'circle', cx:0, cy:0, r:2, stroke:'#2f5fa8' },
+        { type:'polygon', points:[[1,1],[1,-1],[-1,-1],[-1,1]], stroke:'#b23a46', fill:true, alpha:0.4 }
+      ],
+      correct: true
+    },
+    {
+      shapes: [
+        { type:'circle', cx:0, cy:0, r:2, stroke:'#2f5fa8' },
+        { type:'polygon', points:[[1,1],[1,-1],[-1,-1],[-1,1]], stroke:'#b23a46', fill:false }
+      ],
+      correct: false
+    }
+  ],
+  explain: 'fill=True remplit le carré d\'une couleur pleine (semi-transparente ici). Ce carré reste strictement à l\'intérieur du cercle.'
+});
+
+renderMatching('q-geo-match', {
+  kind: 'Exercice interactif — associer',
+  question: 'Associez chaque paramètre de code à ce qu\'il contrôle dans la figure.',
+  hint: 'Cliquez d\'abord sur un paramètre à gauche, puis sur sa description à droite.',
+  pairs: [
+    { left: `color=<code>'blue'</code>`, right: 'La couleur du tracé' },
+    { left: `fill=<code>True</code>`, right: 'Le remplissage plein de la figure' },
+    { left: `axes=<code>False</code>`, right: 'Le masquage des axes gradués' },
+    { left: `alpha=<code>0.3</code>`, right: 'La transparence partielle du remplissage' }
+  ],
+  explain: 'Chaque paramètre agit sur un aspect visuel précis : la couleur, le remplissage, les axes, ou la transparence — indépendamment des autres.'
+});
+
+/* ============================================================
+   Contenu — Partie 3 : Structures logiques
+   ============================================================ */
+
+renderTutorial('tut-log-0', {
+  num: 1,
+  title: 'Une boucle toute simple',
+  intro: 'La boucle la plus basique : afficher chaque nombre de 1 à 5, un par un. Avancez pas à pas pour voir i évoluer, tour par tour, jusqu\'au bout.',
+  cumulativeOutput: true,
+  lines: [
+    `<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>,<span class="num">6</span>):`,
+    `    <span class="kw">print</span>(i)`
+  ],
+  steps: [
+    { active:[0], note:'La boucle va parcourir les entiers de 1 à 5 : range(1,6) s\'arrête juste avant 6.' },
+    { active:[1], vars:{ i:1 }, note:'Premier tour : i vaut 1.', output:'1' },
+    { active:[1], vars:{ i:2 }, note:'Deuxième tour : i vaut 2.', output:'2' },
+    { active:[1], vars:{ i:3 }, note:'Troisième tour : i vaut 3.', output:'3' },
+    { active:[1], vars:{ i:4 }, note:'Quatrième tour : i vaut 4.', output:'4' },
+    { active:[1], vars:{ i:5 }, note:'Cinquième et dernier tour : i vaut 5. La boucle s\'arrête ensuite.', output:'5' }
+  ]
+});
+
+renderTutorial('tut-log-1', {
+  num: 2,
+  title: 'Boucle qui somme des nombres',
+  intro: 'Suivez pas à pas cette boucle : à chaque clic sur Suivant, observez comment i et somme évoluent.',
+  lines: [
+    `somme = <span class="num">0</span>`,
+    `<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>,<span class="num">5</span>):`,
+    `    somme = somme + i`,
+    `<span class="kw">print</span>(somme)`
+  ],
+  steps: [
+    { active:[0], vars:{ somme:0 }, note:'On initialise somme à 0, avant même de commencer la boucle.' },
+    { active:[1,2], vars:{ i:1, somme:1 }, note:'Premier tour : i vaut 1, donc somme = 0 + 1 = 1.' },
+    { active:[1,2], vars:{ i:2, somme:3 }, note:'Deuxième tour : i vaut 2, donc somme = 1 + 2 = 3.' },
+    { active:[1,2], vars:{ i:3, somme:6 }, note:'Troisième tour : i vaut 3, donc somme = 3 + 3 = 6.' },
+    { active:[1,2], vars:{ i:4, somme:10 }, note:'Quatrième et dernier tour — range(1,5) s\'arrête à 4 : somme = 6 + 4 = 10.' },
+    { active:[3], vars:{ somme:10 }, note:'La boucle est terminée : on affiche la valeur finale de somme.', output:'10' }
+  ]
+});
+
+renderTutorial('tut-log-2', {
+  num: 3,
+  title: 'Boucle avec condition (compter les pairs)',
+  intro: 'Cette boucle compte les nombres pairs entre 1 et 6. Avancez pas à pas pour voir comment le compteur évolue — remarquez que le if ne mène pas toujours à la ligne du compteur.',
+  lines: [
+    `compteur = <span class="num">0</span>`,
+    `<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>,<span class="num">7</span>):`,
+    `    <span class="kw">if</span> i % <span class="num">2</span> == <span class="num">0</span>:`,
+    `        compteur = compteur + <span class="num">1</span>`,
+    `<span class="kw">print</span>(compteur)`
+  ],
+  steps: [
+    { active:[0], vars:{ compteur:0 }, note:'Initialisation : compteur commence à 0.' },
+    { active:[1,2], vars:{ i:1, compteur:0 }, note:'i = 1 est impair : la condition i % 2 == 0 est fausse, on n\'entre pas dans le if.' },
+    { active:[1,2], vars:{ i:2, compteur:0 }, note:'i = 2 est pair : la condition est vraie.' },
+    { active:[3], vars:{ i:2, compteur:1 }, note:'On exécute compteur = compteur + 1 : compteur passe à 1.' },
+    { active:[1,2], vars:{ i:3, compteur:1 }, note:'i = 3 est impair : on saute le if.' },
+    { active:[1,2], vars:{ i:4, compteur:1 }, note:'i = 4 est pair : la condition est vraie.' },
+    { active:[3], vars:{ i:4, compteur:2 }, note:'compteur = compteur + 1 : compteur passe à 2.' },
+    { active:[1,2], vars:{ i:5, compteur:2 }, note:'i = 5 est impair : on saute le if.' },
+    { active:[1,2], vars:{ i:6, compteur:2 }, note:'i = 6 est pair : la condition est vraie.' },
+    { active:[3], vars:{ i:6, compteur:3 }, note:'compteur = compteur + 1 : compteur passe à 3.' },
+    { active:[4], vars:{ compteur:3 }, note:'range(1,7) s\'arrête à 6 : la boucle est terminée. On affiche compteur.', output:'3' }
+  ]
+});
+
+renderMCQ('q-log-1', {
+  kind: 'Que vaut la sortie ?',
+  code: `n = <span class="num">3676021</span>
+<span class="kw">if</span> n % <span class="num">2</span> == <span class="num">0</span>:
+    <span class="kw">print</span>(<span class="str">"n est pair"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="str">"n est impair"</span>)`,
+  question: '3676021 se termine par un 1. Que va afficher ce programme ?',
+  choices: [
+    { text: '"n est pair"', correct: false },
+    { text: '"n est impair"', correct: true },
+    { text: 'Rien, le code contient une erreur', correct: false }
+  ],
+  explain: '3676021 % 2 vaut 1, donc la condition n % 2 == 0 est fausse : c\'est la branche else qui s\'exécute.'
+});
+
+renderMCQ('q-log-2', {
+  kind: 'Que vaut la sortie ?',
+  code: `compteur = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>,<span class="num">26</span>):
+    <span class="fn">print</span>(<span class="num">2</span>*i)
+    compteur = compteur + <span class="num">1</span>
+<span class="kw">print</span>(compteur)`,
+  question: 'range(0,26) parcourt les entiers de 0 à 25 inclus. Combien de valeurs sont affichées au total (boucle + compteur final), et quelle est la dernière ?',
+  choices: [
+    { text: '26 valeurs affichées, la dernière est 50', correct: false },
+    { text: '27 valeurs affichées, la dernière est 50', correct: false },
+    { text: '27 valeurs affichées, la dernière est 26', correct: true }
+  ],
+  explain: 'La boucle affiche 26 valeurs (2×0, 2×1, ..., 2×25), puis print(compteur) affiche une 27e valeur : compteur, qui vaut 26 à la fin.'
+});
+
+renderMCQ('q-log-3', {
+  kind: 'Que fait ce code ?',
+  code: `multiples = [<span class="num">3</span>*i <span class="kw">for</span> i <span class="kw">in</span> [<span class="num">0</span>..<span class="num">10</span>]]`,
+  question: 'Que contient la variable multiples après cette ligne ?',
+  choices: [
+    { text: 'Un seul nombre : le dernier résultat calculé', correct: false },
+    { text: 'Une liste des 11 multiples de 3 de 0 à 30', correct: true },
+    { text: 'Une fonction qui calcule 3·i à la demande', correct: false }
+  ],
+  explain: 'C\'est une liste en compréhension : elle construit directement la liste [0, 3, 6, ..., 30], soit 11 valeurs pour i allant de 0 à 10.'
+});
+
+renderMCQ('q-log-4', {
+  kind: 'Que fait ce code ?',
+  code: `cercles = []
+<span class="kw">for</span> r <span class="kw">in</span> [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>]:
+    cercles.append(<span class="fn">circle</span>((<span class="num">0</span>,<span class="num">0</span>), r, color=<span class="str">'blue'</span>))
+
+<span class="fn">show</span>(<span class="fn">sum</span>(cercles), axes=<span class="kw">False</span>)`,
+  preview: { shapes: [
+    { type:'circle', cx:0, cy:0, r:1, stroke:'#2f5fa8' },
+    { type:'circle', cx:0, cy:0, r:2, stroke:'#2f5fa8' },
+    { type:'circle', cx:0, cy:0, r:3, stroke:'#2f5fa8' }
+  ], range: 4 },
+  question: 'Que produit ce code ?',
+  choices: [
+    { text: 'Trois cercles de même centre, de rayons 1, 2 et 3', correct: true },
+    { text: 'Un seul cercle, de rayon 3', correct: false },
+    { text: 'Trois cercles séparés, côte à côte', correct: false }
+  ],
+  explain: 'La boucle crée un cercle pour chaque rayon de la liste [1,2,3], tous centrés en (0,0) : ils sont donc emboîtés les uns dans les autres, avec le même centre.'
+});
+
+renderCodeFill('q-log-fill', {
+  kind: 'Exercice interactif — complète le code',
+  question: 'Complétez l\'opérateur qui calcule le reste d\'une division, pour tester la parité de n.',
+  codeHtml: `n = <span class="num">14</span>
+<span class="kw">if</span> n <input class="blank-input" data-id="b1" style="width:3.5ch" placeholder="op"> <span class="num">2</span> == <span class="num">0</span>:
+    <span class="kw">print</span>(<span class="str">"n est pair"</span>)`,
+  blanks: [{ id:'b1', accept:['%'] }],
+  runLabel: 'Vérifier et exécuter',
+  codeOut: 'n est pair',
+  explain: 'L\'opérateur % donne le reste de la division euclidienne. 14 % 2 vaut 0, donc n est bien pair.'
+});
+
+renderMatching('q-log-match', {
+  kind: 'Exercice interactif — associer',
+  question: 'Associez chaque extrait de code à ce qu\'il produit.',
+  hint: 'Cliquez d\'abord sur un code à gauche, puis sur sa description à droite.',
+  pairs: [
+    { left: `<code>for i in range(0,5): print(i)</code>`, right: 'Affiche 0, 1, 2, 3, 4, chacun sur une ligne' },
+    { left: `<code>[i^2 for i in range(0,4)]</code>`, right: 'Construit la liste [0, 1, 4, 9]' },
+    { left: `<code>if n%2==0: print("pair")</code>`, right: 'Teste si n est un nombre pair' },
+    { left: `<code>for i in range(3): print("Bonjour")</code>`, right: 'Répète le mot "Bonjour" trois fois' }
+  ],
+  explain: 'Chaque structure a un rôle précis : une boucle for répète des actions, une liste en compréhension construit une collection, un if teste une condition.'
+});
+
+renderDragOrder('q-log-drag-1', {
+  kind: 'Exercice interactif — remettre en ordre',
+  question: 'Remettez dans l\'ordre les étapes de l\'algorithme "tester si un nombre n est pair".',
+  hint: 'Glissez les étapes (souris ou doigt) pour reconstruire la logique du if / else du cours.',
+  items: [
+    'Choisir un nombre entier n',
+    'Calculer le reste de n divisé par 2, c\'est-à-dire n % 2',
+    'Si ce reste vaut 0, alors n est pair',
+    'Sinon (le reste vaut 1), n est impair',
+    'Afficher le résultat obtenu'
+  ],
+  explain: 'C\'est exactement la structure if / else du cours : une condition (n % 2 == 0), une branche si elle est vraie, une branche sinon.'
+});
+
+renderDragOrder('q-log-drag-2', {
+  kind: 'Exercice interactif — remettre en ordre',
+  question: 'Remettez dans l\'ordre les étapes pour tester si un nombre n est un multiple de 3, en utilisant la somme de ses chiffres.',
+  hint: 'La somme des chiffres d\'un multiple de 3 est elle-même un multiple de 3.',
+  items: [
+    'Choisir un nombre entier n',
+    'Calculer la somme des chiffres de n',
+    'Diviser cette somme par 3 et regarder le reste',
+    'Si le reste vaut 0, alors n est un multiple de 3',
+    'Sinon, n n\'est pas un multiple de 3'
+  ],
+  explain: 'On applique la même structure if / else, mais la condition testée porte ici sur la somme des chiffres plutôt que sur n directement.'
+});
+
+renderDragOrder('q-log-drag-3', {
+  kind: 'Exercice interactif — remettre en ordre',
+  question: 'Remettez dans l\'ordre les étapes d\'une boucle for qui calcule la somme des entiers de 1 à N.',
+  hint: 'Pensez à ce qu\'il faut préparer avant la boucle, ce qui se répète pendant, et ce qu\'on fait après.',
+  items: [
+    'Initialiser une variable somme à 0',
+    'Pour i allant de 1 à N',
+    'Ajouter i à la variable somme, à chaque tour de boucle',
+    'Une fois la boucle terminée, afficher la valeur de somme'
+  ],
+  explain: 'Un schéma très courant : initialiser un accumulateur, le mettre à jour à chaque tour de la boucle, puis lire son résultat final une fois la boucle achevée.'
+});
+
+/* ============================================================
+   Contenu — Partie 4 : Fonctions
+   ============================================================ */
+
+renderTutorial('tut-fn-1', {
+  num: 1,
+  title: 'Anatomie d\'une fonction, ligne par ligne',
+  intro: 'Reprenons cube et regardons chaque ligne : sa définition, son corps, puis son appel.',
+  lines: [
+    `<span class="kw">def</span> <span class="fn">cube</span>(nombre):`,
+    `    <span class="kw">return</span> nombre^<span class="num">3</span>`,
+    `<span class="fn">cube</span>(<span class="num">5</span>)`
+  ],
+  steps: [
+    { active:[0], note:'def commence la définition. La fonction s\'appelle cube et attend un paramètre : nombre.' },
+    { active:[1], note:'Le corps de la fonction : elle renvoie nombre à la puissance 3 (nombre^3).' },
+    { active:[2], vars:{ nombre:5 }, note:'On appelle la fonction avec 5 : nombre prend la valeur 5.' },
+    { active:[2], vars:{ nombre:5, resultat:125 }, note:'5^3 = 5 × 5 × 5 = 125 : c\'est la valeur renvoyée.', output:'125' }
+  ]
+});
+
+renderTutorial('tut-fn-2', {
+  num: 2,
+  title: 'Une fonction à deux entrées',
+  intro: 'Une fonction peut attendre plusieurs paramètres, séparés par des virgules. Voici perimetre_rectangle, avec L et l.',
+  lines: [
+    `<span class="kw">def</span> <span class="fn">perimetre_rectangle</span>(L, l):`,
+    `    <span class="kw">return</span> <span class="num">2</span>*(L+l)`,
+    `<span class="fn">perimetre_rectangle</span>(<span class="num">5</span>, <span class="num">3</span>)`
+  ],
+  steps: [
+    { active:[0], note:'Cette fonction attend deux paramètres : L (longueur) et l (largeur), séparés par une virgule.' },
+    { active:[1], note:'Le corps calcule le périmètre : deux fois la somme de la longueur et de la largeur.' },
+    { active:[2], vars:{ L:5, l:3 }, note:'On appelle la fonction avec L = 5 et l = 3.' },
+    { active:[2], vars:{ L:5, l:3, resultat:16 }, note:'2 × (5 + 3) = 2 × 8 = 16 : c\'est la valeur renvoyée.', output:'16' }
+  ]
+});
+
+renderTutorial('tut-fn-3', {
+  num: 3,
+  title: 'Tracer le graphe d\'une fonction avec plot()',
+  intro: 'plot() trace la courbe d\'une expression mathématique sur un intervalle donné, avec les mêmes paramètres de style que pour les figures géométriques.',
+  range: 5,
+  steps: [
+    {
+      code: `<span class="fn">plot</span>(x^<span class="num">2</span>, (x, -<span class="num">2</span>, <span class="num">2</span>))`,
+      shapes: [{ type:'curve', fn: x => x*x, xMin:-2, xMax:2, color:'#2f5fa8' }],
+      note: 'plot(expression, (variable, début, fin)) trace la courbe de x² sur l\'intervalle [-2, 2].'
+    },
+    {
+      code: `<span class="fn">plot</span>(x^<span class="num">2</span>, (x, -<span class="num">2</span>, <span class="num">2</span>), color=<span class="str">'red'</span>)`,
+      shapes: [{ type:'curve', fn: x => x*x, xMin:-2, xMax:2, color:'#b23a46' }],
+      note: 'color change la couleur du tracé, exactement comme pour circle() ou polygon().'
+    },
+    {
+      code: `<span class="fn">plot</span>(x^<span class="num">2</span>, (x, -<span class="num">2</span>, <span class="num">2</span>), color=<span class="str">'red'</span>, linestyle=<span class="str">'--'</span>)`,
+      shapes: [{ type:'curve', fn: x => x*x, xMin:-2, xMax:2, color:'#b23a46', dashed:true }],
+      note: 'linestyle=\'--\' trace la courbe en pointillés plutôt qu\'en trait plein.'
+    }
+  ]
+});
+
+renderMCQ('q-fn-1', {
+  kind: 'Que vaut la sortie ?',
+  code: `<span class="kw">def</span> <span class="fn">puissance4</span>(nombre):
+    <span class="kw">return</span> nombre^<span class="num">4</span>
+
+<span class="fn">puissance4</span>(<span class="num">4</span>)`,
+  question: 'Quelle est la valeur de puissance4(4) ?',
+  choices: [
+    { text: '16', correct: false },
+    { text: '256', correct: true },
+    { text: '64', correct: false }
+  ],
+  explain: 'puissance4(x) renvoie x⁴. 4⁴ = 4×4×4×4 = 256.'
+});
+
+renderMCQ('q-fn-2', {
+  kind: 'Associer input / fonction / output',
+  code: `<span class="kw">def</span> <span class="fn">ajoute_dix</span>(x):
+    <span class="kw">return</span> x + <span class="num">10</span>
+
+<span class="fn">ajoute_dix</span>(<span class="num">5</span>)`,
+  question: 'Dans cet exemple, que représente x = 5, la valeur donnée avant l\'exécution de la fonction ?',
+  choices: [
+    { text: 'La fonction f elle-même', correct: false },
+    { text: 'L\'input, c\'est-à-dire l\'entrée de la fonction', correct: true },
+    { text: 'L\'output, c\'est-à-dire la sortie de la fonction', correct: false }
+  ],
+  explain: 'x est ce que l\'on donne à la fonction avant traitement (l\'input) ; f(x) = 15, la valeur renvoyée, est l\'output.'
+});
+
+renderMCQ('q-fn-3', {
+  kind: 'Que vaut la sortie ?',
+  code: `<span class="kw">def</span> <span class="fn">moy</span>(x,y,z):
+    <span class="kw">return</span> (x+y+z)/<span class="num">3</span>
+
+<span class="fn">moy</span>(<span class="num">45</span>,<span class="num">60</span>,<span class="num">90</span>)`,
+  question: 'Quelle est la sortie de ce programme ?',
+  choices: [
+    { text: '65', correct: true },
+    { text: '195', correct: false },
+    { text: '50', correct: false }
+  ],
+  explain: '(45 + 60 + 90) / 3 = 195 / 3 = 65.'
+});
+
+renderMCQ('q-fn-4', {
+  kind: 'Vrai ou faux',
+  code: `<span class="kw">def</span> <span class="fn">rapport_aire_perimetre</span>(r):
+    A = pi * r^<span class="num">2</span>
+    P = <span class="num">2</span> * pi * r
+    <span class="kw">return</span> A/P`,
+  question: 'Cette fonction prend deux entrées, r et pi, puisque les deux apparaissent dans le calcul.',
+  choices: [
+    { text: 'Vrai', correct: false },
+    { text: 'Faux — seul r est un paramètre de la fonction, pi est une constante déjà connue de Sage', correct: true }
+  ],
+  explain: 'Seule la variable listée entre parenthèses dans def rapport_aire_perimetre(r) est un paramètre ; pi est une constante mathématique fournie par Sage, pas une entrée de la fonction.'
+});
+
+renderMCQ('q-fn-5', {
+  kind: 'Combien de variables ?',
+  code: `<span class="kw">def</span> <span class="fn">aire_rectangle</span>(L, l):
+    <span class="kw">return</span> L * l`,
+  question: 'Combien de paramètres (variables d\'entrée) cette fonction possède-t-elle ?',
+  choices: [
+    { text: '1 paramètre', correct: false },
+    { text: '2 paramètres', correct: true },
+    { text: '3 paramètres', correct: false }
+  ],
+  explain: 'La fonction attend deux valeurs, la longueur L et la largeur l, séparées par une virgule dans la définition.'
+});
+
+renderCodeFill('q-fn-fill', {
+  kind: 'Exercice interactif — complète le code',
+  question: 'Complétez l\'opérateur de puissance pour que carre(x) calcule x au carré.',
+  codeHtml: `<span class="kw">def</span> <span class="fn">carre</span>(x):
+    <span class="kw">return</span> x <input class="blank-input" data-id="b1" style="width:3ch" placeholder="op"> <span class="num">2</span>
+
+<span class="fn">carre</span>(<span class="num">5</span>)`,
+  blanks: [{ id:'b1', accept:['^','**'] }],
+  runLabel: 'Vérifier et exécuter',
+  codeOut: '25',
+  explain: 'En Sage, ^ (ou **) élève un nombre à une puissance. carre(5) = 5^2 = 25.'
+});
+
+renderMatching('q-fn-match', {
+  kind: 'Exercice interactif — associer',
+  question: 'Associez chaque appel de fonction à sa valeur de sortie.',
+  hint: 'Cliquez d\'abord sur un appel à gauche, puis sur sa sortie à droite.',
+  pairs: [
+    { left: `<code>def f(x): return x^2</code><br><code>f(6)</code>`, right: '36' },
+    { left: `<code>def g(x): return 2*x</code><br><code>g(6)</code>`, right: '12' },
+    { left: `<code>def h(x): return x/2</code><br><code>h(6)</code>`, right: '3' },
+    { left: `<code>def k(x): return 1/x</code><br><code>k(6)</code>`, right: '1/6' }
+  ],
+  explain: 'Chaque fonction applique une règle différente au même input (6), d\'où quatre sorties bien distinctes : 36, 12, 3 et 1/6.'
+});
+
+/* ============================================================
+   Numérotation des questions — un compteur par section, hors tutoriels
+   ============================================================ */
+(function(){
+  document.querySelectorAll('section.window').forEach(win => {
+    const body = win.querySelector('.window-body');
+    if (!body) return;
+    const cards = body.querySelectorAll('.quiz, .dragquiz, .matchquiz, .canvasquiz, .fillquiz, .imgchoicequiz');
+    cards.forEach((card, i) => {
+      const kindEl = card.querySelector('.qkind');
+      if (!kindEl) return;
+      const badge = document.createElement('span');
+      badge.className = 'qnum-badge';
+      badge.textContent = i + 1;
+      kindEl.insertBefore(badge, kindEl.firstChild);
+    });
+  });
+})();
+
+/* ============================================================
+   Bascule mode sombre / clair
+   ============================================================ */
+(function(){
+  const toggle = document.getElementById('theme-toggle');
+  if (!toggle) return;
+  const dot = toggle.querySelector('.theme-toggle-dot');
+
+  function setDark(dark){
+    document.body.classList.toggle('dark-mode', dark);
+    toggle.classList.toggle('active', dark);
+    toggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    dot.textContent = dark ? '🌙' : '☀️';
+  }
+
+  toggle.addEventListener('click', () => {
+    setDark(!document.body.classList.contains('dark-mode'));
+  });
+})();
+
+/* ============================================================
+   Navigation façon "fenêtres" — une seule section visible à la fois,
+   avec transition en fondu et mise à jour de la carte des niveaux
+   ============================================================ */
+(function(){
+  const nodes = [...document.querySelectorAll('.level-node')];
+  const sectionIds = ['arithmetique','geometrie','logique','fonctions'];
+  const sections = {};
+  sectionIds.forEach(id => sections[id] = document.getElementById(id));
+  const emptyState = document.getElementById('empty-state');
+  const closeButtons = [...document.querySelectorAll('.window-close')];
+  const FADE_MS = 260;
+
+  function fadeIn(sec){
+    sec.classList.add('open');
+    // double rAF : laisse le navigateur peindre l'état display:block/opacity:0
+    // avant de déclencher la transition vers opacity:1.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => sec.classList.add('visible'));
+    });
+  }
+
+  function fadeOut(sec){
+    if (!sec.classList.contains('open')) return;
+    sec.classList.remove('visible');
+    setTimeout(() => {
+      if (!sec.classList.contains('visible')) sec.classList.remove('open');
+    }, FADE_MS);
+  }
+
+  function openSection(id){
+    sectionIds.forEach(sid => {
+      if (sid === id) fadeIn(sections[sid]);
+      else fadeOut(sections[sid]);
+    });
+    emptyState.style.display = 'none';
+    nodes.forEach(n => n.classList.toggle('open', n.dataset.target === id));
+    sections[id].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function closeAll(){
+    sectionIds.forEach(sid => fadeOut(sections[sid]));
+    nodes.forEach(n => n.classList.remove('open'));
+    setTimeout(() => { emptyState.style.display = 'block'; }, FADE_MS);
+  }
+
+  nodes.forEach((node) => {
+    node.addEventListener('click', () => openSection(node.dataset.target));
+  });
+
+  closeButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeAll();
+    });
+  });
+
+  // état initial : la première partie est ouverte
+  openSection('arithmetique');
+
+  // exposé pour la barre de recherche et l'assistant renard
+  window.__openSection = openSection;
+})();
+
+/* ============================================================
+   Glossaire au survol — première occurrence de chaque terme Sage
+   ============================================================ */
+(function(){
+  const seen = new Set();
+  document.querySelectorAll('.fn').forEach(span => {
+    const term = span.textContent.trim();
+    const def = GLOSSARY[term];
+    if (!def || seen.has(term)) return;
+    seen.add(term);
+    span.classList.add('glossary-term');
+    span.setAttribute('data-tip', def);
+    span.setAttribute('tabindex', '0');
+  });
+})();
+
+/* ============================================================
+   Barre de recherche globale
+   ============================================================ */
+(function(){
+  const input = document.getElementById('global-search');
+  const resultsBox = document.getElementById('search-results');
+  const searchBar = document.querySelector('.search-bar');
+  if (!input || !resultsBox || !searchBar) return;
+
+  let index = [];
+
+  function buildIndex(){
+    index = [];
+    document.querySelectorAll('.qcard').forEach(card => {
+      const sectionEl = card.closest('section.window');
+      if (!sectionEl) return;
+      const kindEl = card.querySelector('.qkind');
+      const kindText = kindEl ? kindEl.textContent.replace(/^\d+/, '').trim() : '';
+      const qtextEl = card.querySelector('.qtext');
+      const qtext = qtextEl ? qtextEl.textContent.trim() : '';
+      const codeEl = card.querySelector('.cell-in');
+      const codeText = codeEl ? codeEl.textContent : '';
+      const title = qtext || kindText || 'Question';
+      index.push({
+        card,
+        sectionId: sectionEl.id,
+        sectionLabel: SECTION_LABELS[sectionEl.id] || sectionEl.id,
+        title,
+        searchable: (kindText + ' ' + qtext + ' ' + codeText).toLowerCase()
+      });
+    });
+  }
+
+  function goToResult(m){
+    if (typeof window.__openSection === 'function') window.__openSection(m.sectionId);
+    m.card.classList.add('expanded');
+    setTimeout(() => { m.card.scrollIntoView({ behavior:'smooth', block:'center' }); }, 320);
+    resultsBox.classList.remove('show');
+    input.value = '';
+  }
+
+  function renderResults(query){
+    const q = query.trim().toLowerCase();
+    if (!q){ resultsBox.classList.remove('show'); resultsBox.innerHTML = ''; return; }
+    const matches = index.filter(item => item.searchable.includes(q)).slice(0, 8);
+    resultsBox.innerHTML = '';
+    if (matches.length === 0){
+      const empty = el('div','search-empty', 'Aucun résultat pour « ' + query + ' ».');
+      resultsBox.appendChild(empty);
+    } else {
+      matches.forEach(m => {
+        const btn = el('button','search-result-item');
+        btn.type = 'button';
+        btn.appendChild(el('span','search-result-section', m.sectionLabel));
+        btn.appendChild(el('span','search-result-title', m.title.slice(0, 90)));
+        btn.addEventListener('click', () => goToResult(m));
+        resultsBox.appendChild(btn);
+      });
+    }
+    resultsBox.classList.add('show');
+  }
+
+  buildIndex();
+
+  input.addEventListener('input', () => renderResults(input.value));
+  input.addEventListener('focus', () => { if (input.value) renderResults(input.value); });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
+      const q = input.value.trim().toLowerCase();
+      if (!q) return;
+      const first = index.find(item => item.searchable.includes(q));
+      if (first) goToResult(first);
+    } else if (e.key === 'Escape'){
+      resultsBox.classList.remove('show');
+      input.blur();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!searchBar.contains(e.target)) resultsBox.classList.remove('show');
+  });
+})();
+
+/* ============================================================
+   Assistant renard — recherche de commandes (mini-chatbot)
+   ============================================================ */
+(function(){
+  const avatar = document.getElementById('mascot-avatar');
+  const panel = document.getElementById('mascot-chat');
+  const body = document.getElementById('mascot-chat-body');
+  const closeBtn = document.getElementById('mascot-chat-close');
+  if (!avatar || !panel || !body || !closeBtn) return;
+
+  let started = false;
+
+  function addBotMessage(html){
+    const msg = el('div','chat-msg bot');
+    msg.innerHTML = html;
+    body.appendChild(msg);
+    body.scrollTop = body.scrollHeight;
+  }
+  function addUserMessage(text){
+    const msg = el('div','chat-msg user', text);
+    body.appendChild(msg);
+    body.scrollTop = body.scrollHeight;
+  }
+  function addChoices(options){
+    const wrap = el('div','chat-choices');
+    options.forEach(opt => {
+      const btn = el('button','chat-choice', opt.label);
+      btn.type = 'button';
+      btn.addEventListener('click', () => {
+        [...wrap.querySelectorAll('button')].forEach(b => b.disabled = true);
+        addUserMessage(opt.label);
+        opt.onClick();
+      });
+      wrap.appendChild(btn);
+    });
+    body.appendChild(wrap);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function showCommandsMenu(){
+    addBotMessage('Quelle commande veux-tu voir ?');
+    addChoices(COMMAND_EXAMPLES.map(c => ({
+      label: c.term,
+      onClick: () => {
+        const msg = el('div','chat-msg bot');
+        const lead = document.createElement('span');
+        lead.innerHTML = '<b>' + c.term + '</b> — ' + c.def;
+        msg.appendChild(lead);
+        msg.appendChild(el('div','chat-code', c.example));
+        const out = el('div','chat-output');
+        out.appendChild(el('span','chat-output-label','Sortie'));
+        out.appendChild(document.createTextNode(c.output));
+        msg.appendChild(out);
+        body.appendChild(msg);
+        body.scrollTop = body.scrollHeight;
+        addChoices([{ label:'⬅ Toutes les commandes', onClick: showCommandsMenu }]);
+      }
+    })));
+  }
+
+  function togglePanel(){
+    const showing = panel.classList.toggle('show');
+    if (showing && !started){
+      started = true;
+      showCommandsMenu();
+    }
+  }
+
+  avatar.addEventListener('click', togglePanel);
+  avatar.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      togglePanel();
+    }
+  });
+  closeBtn.addEventListener('click', () => panel.classList.remove('show'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel.classList.contains('show')) panel.classList.remove('show');
+  });
+})();
+
+</script>
+</body>
+</html>
